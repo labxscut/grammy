@@ -5,7 +5,7 @@ import scipy as sp
 from scipy.io import mmio
 from Bio import SeqIO
 from math import sqrt
-import gemcore
+from grammy import gemcore
 
 def gclassify_one(cdata, C, gdt, genomes_records, L, K, i):
 

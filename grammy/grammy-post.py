@@ -8,7 +8,7 @@ from scipy import sparse
 
 BLD_DIR="./build/lib.linux-%s-2.6/gem"
 sys.path.append( BLD_DIR % platform.machine() )
-import gemaux, gemlib, gemcore, gemmath, gemutil
+from grammy import gemaux, gemlib, gemcore, gemmath, gemutil
 
 def main():
   #

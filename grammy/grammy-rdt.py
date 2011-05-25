@@ -6,7 +6,7 @@ from Bio import SeqIO
 
 BLD_DIR="build/lib.linux-%s-2.6/gem"
 sys.path.append( BLD_DIR % platform.machine() )
-import gemaux, gemlib, gemcore, gemmath, gemutil
+from grammy import gemaux, gemlib, gemcore, gemmath, gemutil
 
 """suppose we have an o_prefix dir,
    all file paths are relative from that,
