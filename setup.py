@@ -89,5 +89,5 @@ setup(name="grammy",
                       'Programming Language :: C++',
                       'Topic :: Biological Sciences',
                 ],
-  scripts = ['grammy/
+  scripts = ['scripts/grammy-rdt.py','scripts/grammy-gdt.py','scripts/grammy-pre.py','scripts/grammy-em.py','scripts/grammy-post.py'],
 )

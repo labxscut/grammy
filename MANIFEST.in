@@ -16,8 +16,8 @@ include grammy/gemaux.py
 include grammy/gemlib.py
 include grammy/gemmath.py
 include grammy/gemutil.py
-include grammy/grammy-em.py
-include grammy/grammy-gdt.py
-include grammy/grammy-post.py
-include grammy/grammy-pre.py
-include grammy/grammy-rdt.py
+include scripts/grammy-em.py
+include scripts/grammy-gdt.py
+include scripts/grammy-post.py
+include scripts/grammy-pre.py
+include scripts/grammy-rdt.py
