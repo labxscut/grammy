@@ -89,4 +89,5 @@ setup(name="grammy",
                       'Programming Language :: C++',
                       'Topic :: Biological Sciences',
                 ],
+  scripts = ['grammy/
 )
