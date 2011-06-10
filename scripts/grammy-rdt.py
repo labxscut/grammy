@@ -6,6 +6,7 @@ from Bio import SeqIO
 
 BLD_DIR="build/lib.linux-%s-2.6/gem"
 sys.path.append( BLD_DIR % platform.machine() )
+
 from grammy import gemaux, gemlib, gemcore, gemmath, gemutil
 
 """suppose we have an o_prefix dir,
@@ -46,12 +47,17 @@ def parse_reads( o_prefix, src_dir, i_suffix, name_change, seq_tech ):
       rdata.read_length = reads_len/reads_no
       rdata.reads_file = reads_file
       rdata.reads_number = reads_no
-      rdata.write( set_name )
+      rdata.write( os.path.join(o_prefix,set_name) )
 
 def main():
   #
   usage_error = """ type %s -h for more information """ % os.path.basename(sys.argv[0])
-  usage = """ %prog [options] o_prefix i_prefix """
+  usage = """ %prog [options] o_prefix i_prefix 
+
+Arguments:
+  o_prefix STRING       o_prefix,  the output will be o_prefix/xxx.rdt nd o_prefix/xxx.fasta.gz, use '.' for current directory
+  i_prefix STRING       i_prefix,  a dir where reads file reside"""
+
   parser = op.OptionParser(usage, )
   #parser.add_option("-m","--mtx", dest="mtx", type="string", help="input read probability matrix file", metavar="FILE")
   parser.add_option("-s","--suf", dest="suf", type="string", help="read files suffix, default=fa.gz", default="fa.gz", metavar="STRING")

@@ -3,27 +3,29 @@
 
 import time, os, sys, subprocess, csv, re, random, string
 import tarfile, gzip, fnmatch
+import gemaux
 from Bio import SeqIO
 
 class Read_Data:
   def __init__(self):
     self.read_length = None      # average read length
     self.read_tech = None        # sequencing technology
-    self.reads_file = []         # file contains reads
+    self.reads_file = []       # file contains reads
     self.reads_number = None     # either use the # of seqs from reads_file or this
     #self.reads_files = None      # if the reads data is a set of reads file
 
   def write(self, o_prefix):
     rdt_out = open( o_prefix+".rdt", 'w' )
     print >>rdt_out, "rdata=gemaux.Read_Data()"
-    print >>rdt_out, "read_tech=", "'%s'" % self.read_tech
-    print >>rdt_out, "reads_file=", "'%s'" % self.reads_file
-    print >>rdt_out, "read_length=", self.read_length
-    print >>rdt_out, "reads_number=", self.reads_number
+    print >>rdt_out, "rdata.read_tech=", "'%s'" % self.read_tech
+    print >>rdt_out, "rdata.reads_file=", "'%s'" % self.reads_file
+    print >>rdt_out, "rdata.read_length=", self.read_length
+    print >>rdt_out, "rdata.reads_number=", self.reads_number
 
   def read(self, i_prefix):
-    del rdata
-    execfile( i_prefix+".rdt" )
+    #execfile( i_prefix+".rdt" )
+    for line in open( i_prefix+".rdt" ).readlines():
+      exec(line)
     self.read_length = rdata.read_length
     self.read_tech = rdata.read_tech
     self.reads_file = rdata.reads_file
@@ -49,14 +51,14 @@ class Genome_Data:
     print >>gdt_out, "gdata.taxid_length=", self.taxid_length
 
   def read(self, i_prefix):
-    del gdata
-    execfile( i_prefix+".rdt" )
+    #execfile( i_prefix+".gdt" )
+    for line in open( i_prefix+".gdt" ).readlines():
+      exec(line)
     self.taxids = gdata.taxids
     self.taxid_genomes = gdata.taxid_genomes
     self.gi_taxid = gdata.gi_taxid
     self.genomes_file = gdata.genomes_file
     self.taxid_length = gdata.taxid_length
-
 
 class Sim_Read_Data(Read_Data):
   def __init__(self):

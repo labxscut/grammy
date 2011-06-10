@@ -9,3 +9,4 @@ INSTALL.txt(v1.0.0)
 (ii) Source code access at: https://bitbucket.org/charade/grammy.
     The python package is made open source for advanced users to pipeline the
     analysis or implement other variants.
+    For dependence information please refer to the README.txt within the package.

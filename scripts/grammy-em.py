@@ -9,7 +9,10 @@ from grammy import gemaux, gemlib, gemcore, gemmath, gemutil
 
 def main():
   usage_error = """ type %s -h for more information """ % os.path.basename(sys.argv[0])
-  usage = """ %prog [options] read_probability.mtx(s) """
+  usage = """ %prog [options] read_probability.mtx(s)
+Arguments:
+  read_probability.mtx: input probability matrix file"""
+
   parser = op.OptionParser(usage, )
   #parser.add_option("-m","--mtx", dest="mtx", type="string", help="input read probability matrix file", metavar="FILE")
   parser.add_option("-b","--btp", dest="btp", type="int", help="bootstrap number, default=10", default=10, metavar="INTEGER")

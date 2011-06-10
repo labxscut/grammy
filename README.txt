@@ -3,6 +3,8 @@ README.txt(v1.0.0)
 
 PACKAGE NAME:
     Genome Relative Abundance using Mixture Model thoery (GRAMMy)
+    Currently the package works for Linux platforms.
+    It might be work for OS X and Windows (not tested).
 
 DEPENDENCY:
     Python(>=2.5)
@@ -21,19 +23,25 @@ FILES:
     grammy/
     doc/
     test/
+    scripts/
 
 INSTALL:
     Refer to INSTALL.txt
 
 EXECUTABLES:
-    grammy-gdt.py
-    grammy-rdt.py
-    grammy-pre.py
-    grammy-em.py
-    grammy-post.py
+    scripts/grammy-gdt.py
+    scripts/grammy-rdt.py
+    scripts/grammy-pre.py
+    scripts/grammy-em.py
+    scripts/grammy-post.py
 
 USAGE:
-    Use '-h' to read individual usage.
+    (i) Above executables will be available from your python scripts directory.
+    	Use '-h' to read individual script usage.
+    (ii) A pre-structured genome and taxon directory if required for grammy-gdt.py;
+    	An example is available as the grefs.tgz file.
+    	The file can be downloaded from http://meta.usc.edu/softs/grammy/grefs.tgz
+    (iii) A test example is available at 'test/test.sh' and explained there.
 
 DOCUMENTATION:
     (i) developement information of grammy sub modules, e.g. grammy.gemlib model,

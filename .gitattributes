@@ -1,0 +1,2 @@
+/test/test.fna.1 filter=lfs diff=lfs merge=lfs -text
+/test/test.fna.2 filter=lfs diff=lfs merge=lfs -text

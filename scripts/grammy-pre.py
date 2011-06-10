@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
 import optparse as op
-import os, sys, tempfile, platform
+import os, sys, tempfile, platform, gzip
 from Bio.Blast import NCBIStandalone
 from Bio import SeqIO
 from scipy.io import mmio
 from scipy import sparse
+import scipy as sp
 
 TMP_DIR = tempfile.mkdtemp()
 BLD_DIR="build/lib.linux-%s-2.6/gem"
@@ -14,14 +15,20 @@ from grammy import gemaux, gemlib, gemcore, gemmath, gemutil
 
 def main():
   #
-  usage_error = "usage: %prog [options] read_dat.rdt gen_dat.gdt"
-  parser = op.OptionParser(usage_error)
+  usage_error = """ type %s -h for more information """
+  usage = """usage: %prog [options] read_dat gen_dat
+
+Arguments:
+  read_dat  STRING        will use read_dat.rdt as read data file
+  gen_dat   STRING        will use gen_dat.gdt as genome data file"""
+
+  parser = op.OptionParser(usage)
   parser.add_option("-m","--mtd", dest="mtd", type="string", 
     help="method for read assignment,\n  tbl -- tabular blast format\n  kmer -- kmer ",
     default='tbl', metavar="METHOD")
   parser.add_option("-p","--par1", dest="par1", type="string",
     help="first parameter for read assignment method, tbl filename or k",
-    default='read_dat.tbl', metavar="FILE/INT")
+    default='read_dat.tblat' , metavar="FILE/INT")
   parser.add_option("-q","--par2", dest="par2", type="string", 
     help="second parameter for read assignment method, al,id,ev or bg",
     default="75,75,-5", metavar="STRING") 
@@ -31,29 +38,36 @@ def main():
     #
     parser.error(usage_error)
 
-  gdt_prefix = os.path.basename(args[1])
   rdt_prefix = os.path.basename(args[0])
-  gdt = gemaux.Genome_Data()  
-  gdt.read( gdt_prefix )
   rdt = gemaux.Read_Data()
   rdt.read( rdt_prefix )
+
+  gdt_prefix = os.path.basename(args[1])
+  gdt = gemaux.Genome_Data()  
+  gdt.read( gdt_prefix )
   
-  #construct dict{ idx: id }
-  rid_ri = dict()
-  rid_rl = dict()
-  i = 0
-  for seq in SeqIO.parse( open( READS_FILE ), 'fasta' ):
-    rid_ri[ seq.id ] = i
-    rid_rl[ seq.id ] = len(seq.seq)
-    i += 1
-  reads_number = i
-  kept = 0
+  if options.mtd == 'tbl':
+
+    #construct dict{ idx: id }
+    read_genomes = dict()
+    rid_ri = dict()
+    rid_rl = dict()
+    i = 0
+
+    for seq in SeqIO.parse( gzip.open( rdt.reads_file ), 'fasta' ):
+      rid_ri[ seq.id ] = i
+      rid_rl[ seq.id ] = len(seq.seq)
+      i += 1
+    reads_number = i
+    kept = 0
+
   
-  if options.mtd == "tbl":
     #indegrients
-    tbl_files = options.par1.split(',')
+    if options.par1 == 'read_dat.tblat':
+      tbl_filename = '%s.tblat' % rdt_prefix
+    else:
+      tbl_filename = options.par1
     tbl_pars = [ int(v) for v in options.par2.split(',') ]
-    read_file = gemutil.fasta_reads_file( rdt.reads_file )
     mtx_file = rdt_prefix+".mtx"
 
     #parsing parameters
@@ -63,12 +77,12 @@ def main():
 
     #parsing
     hits_set = []
-    for i in range(0, len(gdt.genomes_file)):
+    for i in range(1,len(gdt.genomes_file)):
       #
+      tbl_file = (tbl_filename+".%d") % i
       current_gi = None
       current_qi = None
-      tmp_file_to_parse = rdt_prefix + '.%d' % (i+1)
-      map_handle = open( tmp_file_to_parse, 'rU' )
+      map_handle = open( tbl_file, 'rU' )
       for line in map_handle:
         #
         line = line.rstrip('\n')
@@ -85,9 +99,9 @@ def main():
             #print >>sys.stderr, "post -----------------------------------------"
             for hit in hits_set:
               if hit[4] < E_VALUE_THRESH and hit[3] >= ALG_LEN_THRESH and hit[2] >= ALG_ID_THRESH:
-                #retain hits pass a E-value, total aligned length and identity Threshold
-                #print "qi=", qi, ",gi=", gi, ",gdt.gi_taxid[gi]=",gdt.gi_taxid[gi],",tid_index=", \
-                #      gdt.taxids.index(gdt.gi_taxid[gi])  
+                  #retain hits pass a E-value, total aligned length and identity Threshold
+                  #print "qi=", qi, ",gi=", gi, ",gdt.gi_taxid[gi]=",gdt.gi_taxid[gi],",tid_index=", \
+                  #      gdt.taxids.index(gdt.gi_taxid[gi])  
                 read_genomes.setdefault( qi, [] ).append( gdt.taxids.index(gdt.gi_taxid[gi]) ) #adjust for -1 difference
                 kept += 1
           hits_set = []
@@ -100,7 +114,7 @@ def main():
         #print >>sys.stderr, "Number of Total Hits=", kept
     smm = sparse.lil_matrix( (reads_number, len(gdt.taxids)+1) ) # numpy matrix is addressed from 0, we need allocate one more for unknown
     tnm = 0
-
+  
     #first filling in mapped reads
     mn = len(read_genomes)
     for r in read_genomes:
@@ -118,7 +132,7 @@ def main():
         smm[r,g] = float( counts[g] )/gdt.taxid_length[ gdt.taxids[g] ]  # simplest counts and divide probability, perhaps E-value based, weighted probability 
       tnm += nm
     assert tnm==kept
-
+  
     #second imputing in unmapped reads with the average of mapped reads
     unknown_impute = smm.sum()/smm.nnz
     unknown_index = len( gdt.taxids )  # index starts from 0
@@ -130,9 +144,9 @@ def main():
         smm[r,unknown_index] = unknown_impute
         unmapped_reads += 1
     print >>sys.stderr, "generating matrix market file(.mtx)..."
-    sp.io.mmwrite( MTX_FILENAME, smm, comment='E_VALUE_THRESH=%s, ALG_LEN_THRESH=%s, MAPPED=%s, A_MAPPED=%s' \
-      % (str(E_VALUE_THRESH), str(ALG_LEN_THRESH), str(mn), str(smm.nnz-mn)), field='real', precision=8 )
-
+    sp.io.mmwrite( mtx_file, smm, comment='E_VALUE_THRESH=%s, ALG_LEN_THRESH=%s, MAPPED=%s, A_MAPPED=%s' \
+        % (str(E_VALUE_THRESH), str(ALG_LEN_THRESH), str(mn), str(smm.nnz-mn)), field='real', precision=8 )
+  
   elif options.mtd == "kmer":
     #
     kmer_k = int(options.par1)
