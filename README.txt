@@ -13,6 +13,8 @@ DEPENDENCY:
         download @ http://www.scipy.org/
     Scipy(>=0.6)
         download @ http://www.scipy.org/
+    Biopython(>=1.0)
+        download @ http://biopython.org/
 
 FILES:
     LICENSE.txt

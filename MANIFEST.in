@@ -16,8 +16,11 @@ include grammy/gemaux.py
 include grammy/gemlib.py
 include grammy/gemmath.py
 include grammy/gemutil.py
+include grammy/mydebug.cpp
+include grammy/mydebug.hpp
 include scripts/grammy-em.py
 include scripts/grammy-gdt.py
 include scripts/grammy-post.py
 include scripts/grammy-pre.py
 include scripts/grammy-rdt.py
+prune test
