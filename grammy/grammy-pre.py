@@ -1,7 +1,35 @@
 #!/usr/bin/env python
 
-import optparse as op
-import os, sys, tempfile, platform, gzip
+#grammy-pre -- preparing for GRAMMy EM calculation 
+
+#License: BSD
+
+#Copyright (c) 2008 Li Charles Xia
+#All rights reserved.
+#
+#Redistribution and use in source and binary forms, with or without
+#modification, are permitted provided that the following conditions
+#are met:
+#1. Redistributions of source code must retain the above copyright
+#   notice, this list of conditions and the following disclaimer.
+#2. Redistributions in binary form must reproduce the above copyright
+#   notice, this list of conditions and the following disclaimer in the
+#   documentation and/or other materials provided with the distribution.
+#3. The name of the author may not be used to endorse or promote products
+#   derived from this software without specific prior written permission.
+#
+#THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+#IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+#OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+#IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+#INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+#NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+#DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+#THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+#(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+#THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+import os, sys, tempfile, platform, gzip, argparse
 from Bio.Blast import NCBIStandalone
 from Bio import SeqIO
 from scipy.io import mmio
@@ -9,44 +37,53 @@ from scipy import sparse
 import scipy as sp
 
 TMP_DIR = tempfile.mkdtemp()
-BLD_DIR="build/lib.linux-%s-2.6/gem"
-sys.path.append( BLD_DIR % platform.machine() )
-from grammy import gemaux, gemlib, gemcore, gemmath, gemutil
+#BLD_DIR="build/lib.linux-%s-2.6/gem"
+#sys.path.append( BLD_DIR % platform.machine() )
+#from grammy import gemaux, gemlib, gemcore, gemmath, gemutil
+try:
+  #installed import
+  from grammy import gemaux, gemlib, gemcore, gemmath, gemutil
+except ImportError:
+  #debug import
+  import gemaux, gemlib, gemcore, gemmath, gemutil
+  #np.seterr(all='raise')
 
 def main():
   #
-  usage_error = """ type %s -h for more information """
-  usage = """usage: %prog [options] read_dat gen_dat
+#  usage_error = """ type %s -h for more information """
+#  usage = """usage: %prog [options] read_dat gen_dat
+#
+#Arguments:
+#  read_dat  STRING        will use read_dat.rdt as read data file
+#  gen_dat   STRING        will use gen_dat.gdt as genome data file"""
 
-Arguments:
-  read_dat  STRING        will use read_dat.rdt as read data file
-  gen_dat   STRING        will use gen_dat.gdt as genome data file"""
-
-  parser = op.OptionParser(usage)
-  parser.add_option("-m","--mtd", dest="mtd", type="string", 
+  parser = argparse.ArgumentParser(description="grammy-pre Commandline Tool")
+  parser.add_argument("read_dat", metavar= "read_dat", help="will use read_dat.rdt as read data file")
+  parser.add_argument("gen_dat", metavar= "gen_dat", help="will use gen_dat.gdt as genome data file")
+  parser.add_argument("-m","--mtd", dest="mtd", choices=['tbl', 'kmer'],
     help="method for read assignment,\n  tbl -- tabular blast format\n  kmer -- kmer ",
-    default='tbl', metavar="METHOD")
-  parser.add_option("-p","--par1", dest="par1", type="string",
+    default='tbl')
+  parser.add_argument("-p","--par1", dest="par1",
     help="first parameter for read assignment method, tbl filename or k",
-    default='read_dat.tblat' , metavar="FILE/INT")
-  parser.add_option("-q","--par2", dest="par2", type="string", 
+    default='read_dat.tblat')
+  parser.add_argument("-q","--par2", dest="par2", 
     help="second parameter for read assignment method, al,id,ev or bg",
-    default="75,75,-5", metavar="STRING") 
-  (options, args) = parser.parse_args()
+    default="75,75,-5") 
+  arg_namespace = parser.parse_args()
 
-  if len(args) != 2:
-    #
-    parser.error(usage_error)
-
-  rdt_prefix = os.path.basename(args[0])
+  rdt_prefix = os.path.basename(arg_namespace['read_dat'])
   rdt = gemaux.Read_Data()
   rdt.read( rdt_prefix )
 
-  gdt_prefix = os.path.basename(args[1])
+  gdt_prefix = os.path.basename(arg_namespace['gen_dat'])
   gdt = gemaux.Genome_Data()  
   gdt.read( gdt_prefix )
+
+  mtd = arg_namespace['mtd']
+  par1 = arg_namespace['par1']
+  par2 = arg_namespace['par2']
   
-  if options.mtd == 'tbl':
+  if mtd == 'tbl':
 
     #construct dict{ idx: id }
     read_genomes = dict()
@@ -63,11 +100,11 @@ Arguments:
 
   
     #indegrients
-    if options.par1 == 'read_dat.tblat':
+    if par1 == 'read_dat.tblat':
       tbl_filename = '%s.tblat' % rdt_prefix
     else:
-      tbl_filename = options.par1
-    tbl_pars = [ int(v) for v in options.par2.split(',') ]
+      tbl_filename = par1
+    tbl_pars = [ int(v) for v in par2.split(',') ]
     mtx_file = rdt_prefix+".mtx"
 
     #parsing parameters
@@ -147,11 +184,11 @@ Arguments:
     sp.io.mmwrite( mtx_file, smm, comment='E_VALUE_THRESH=%s, ALG_LEN_THRESH=%s, MAPPED=%s, A_MAPPED=%s' \
         % (str(E_VALUE_THRESH), str(ALG_LEN_THRESH), str(mn), str(smm.nnz-mn)), field='real', precision=8 )
   
-  elif options.mtd == "kmer":
+  elif mtd == "kmer":
     #
-    kmer_k = int(options.par1)
-    kmer_bg = options.par2
-    print >>sys.stderr, "not implemented yet!"
+    kmer_k = int(par1)
+    kmer_bg = par2
+    print >>sys.stderr, "Sorry, not integrated to software release yet!"
 
 
 if __name__ == "__main__":

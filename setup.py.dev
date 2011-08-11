@@ -98,4 +98,11 @@ setup(name="grammy",
                       'Programming Language :: C++',
                       'Topic :: Biological Sciences',
                 ],
+  entry_points = { 'console_scripts': [
+      'grammy-rdt = grammy.grammy-rdt:main',
+      'grammy-gdt = grammy.grammy-gdt:main',
+      'grammy-pre = grammy.grammy-pre:main',
+      'grammy-em = grammy-em:main',
+      'grammy-post = grammy-post:main'
+  ] },
 )

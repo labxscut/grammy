@@ -2,7 +2,7 @@
 
 #License: BSD
 
-#Copyright (c) 2008 Li Charles Xia
+#Copyright (c) 2008 Li Charlie Xia
 #All rights reserved.
 #
 #Redistribution and use in source and binary forms, with or without
@@ -27,9 +27,9 @@
 #(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 #THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""GRAMMY GENOME Relative Abundance based on Mixture Model theorY.
+"""GRAMMY: GENOME Relative Abundance based on Mixture Model theorY.
 
-This python module provide tools for metagenomic abundance estimation
+This C++ python module provide tools for metagenomic abundance estimation
 based on read probability partitions (alignment or composition based).
 
 TODO:
@@ -44,7 +44,7 @@ doclines=__doc__.splitlines()
 
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 
-os.environ['CC'] = 'g++'  #temporary measure to trick distutils use g++, need update to distutils2
+#os.environ['CC'] = 'g++'  #temporary measure to trick distutils use g++, need update to distutils2
 
 class my_build(build.build):
 # different order: build_ext *before* build_py, so that 
@@ -66,7 +66,7 @@ setup(name="grammy",
   packages=find_packages(exclude=['ez_setup', 'test', 'doc', 'dist', 'gem.egg-info']),
   include_package_data=True,
   zip_safe=False,
-  install_requires=['python >= 2.5.1','biopython >= 1.0','scipy >= 0.6.0','numpy >= 1.2.1'],
+  install_requires=['python >= 2.7','biopython >= 1.0','scipy >= 0.6','numpy >= 1.0'],
   provides=['grammy'],
   ext_modules = [ Extension( 'grammy._gemcore', 
                       sources = ['grammy/gemcore_wrap.cpp', 'grammy/gemcore.cpp', 'grammy/mmio.c'],
@@ -89,5 +89,11 @@ setup(name="grammy",
                       'Programming Language :: C++',
                       #'Topic :: Biological Sciences',
                 ],
-  scripts = ['scripts/grammy-rdt.py','scripts/grammy-gdt.py','scripts/grammy-pre.py','scripts/grammy-em.py','scripts/grammy-post.py'],
+  entry_points = { 'console_scripts': [
+                      'grammy-rdt = grammy.grammy-rdt:main',
+                      'grammy-gdt = grammy.grammy-gdt:main',
+                      'grammy-pre = grammy.grammy-pre:main',
+                      'grammy-em = grammy-em:main',
+                      'grammy-post = grammy-post:main'
+                    ] },
 )
