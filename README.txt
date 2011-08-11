@@ -55,5 +55,3 @@ DOCUMENTATION:
     	can be viewed by issuing "pydoc grammy.gemlib" command on command line. 
     (ii) information of how to use this package for analysis data by examples can
     	be found in documentation in "doc" subdirectory. (this is not up2date)
-
-
