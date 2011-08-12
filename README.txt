@@ -31,7 +31,6 @@ FILES:
     setup.py
     grammy/*
     doc/*
-    test/*
 
 INSTALL:
 
@@ -44,16 +43,16 @@ INSTALL:
 
     Download the latest release of GRAMMy from http://meta.usc.edu/softs/grammy.
     Follow standard python module setup to install:
-        $tar -zxvf grammy-x.x.x.tar.gz
-        $cd grammy-x.x.x
+        $tar -zxvf charade-grammy-release.tar.gz
+        $cd charade-grammy-release
         $python setup.py install
 
     [MAC] (Snow Leopard)
 
     Download the latest release of GRAMMy from http://meta.usc.edu/softs/grammy.
     Follow standard python module setup to install:
-        $tar -zxvf grammy-x.x.x.tar.gz
-        $cd grammy-x.x.x
+        $tar -zxvf charade-grammy-release.tar.gz
+        $cd charade-grammy-release
         $python setup.py install
 
     [Development]
@@ -61,26 +60,23 @@ INSTALL:
     GRAMMy is open source and the version controled repository is at at:
     https://bitbucket.org/charade/grammy.
     Use mercurial tools (http://mercurial.selenic.com) to download a local copy:
-        $hg clone ssh://hg@bitbucket.org/charade/grammy
+        $hg clone ssh://hg@bitbucket.org/charade/grammy grammy-tip
 
     Follow standard python module setup to install:
-        $tar -zxvf grammy-x.x.x.tar.gz
-        $cd grammy-x.x.x
+        $cd grammy-tip
         $python setup.py install
 
-    Note: x.x.x is the version number.
-
 EXECUTABLES:
-    grammy-gdt
-    grammy-rdt
-    grammy-pre
-    grammy-em
-    grammy-post
+    grammy_gdt
+    grammy_rdt
+    grammy_pre
+    grammy_em
+    grammy_post
 
 USAGE:
     (i) Above executables will be available from your python scripts directory.
     	Use '-h' to read individual script usage.
-    (ii) A pre-structured genome and taxon directory if required for grammy-gdt.py;
+    (ii) A pre-structured genome and taxon directory if required for grammy_gdt.py;
     	An example is available as the grefs.tgz file.
     	The file can be downloaded from http://meta.usc.edu/softs/grammy/grefs.tgz
     (iii) A simple test example is available at 'test/test.sh' and explained with in.

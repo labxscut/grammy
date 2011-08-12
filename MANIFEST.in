@@ -1,7 +1,6 @@
 include MANIFEST.in
 include LICENSE.txt
 include INSTALL.txt
-include README.txt
 include setup.py
 include grammy/__init__.py
 include grammy/gemcore.cpp
@@ -18,9 +17,9 @@ include grammy/gemmath.py
 include grammy/gemutil.py
 include grammy/mydebug.cpp
 include grammy/mydebug.hpp
-include scripts/grammy-em.py
-include scripts/grammy-gdt.py
-include scripts/grammy-post.py
-include scripts/grammy-pre.py
-include scripts/grammy-rdt.py
+include grammy/grammy-em.py
+include grammy/grammy-gdt.py
+include grammy/grammy-post.py
+include grammy/grammy-pre.py
+include grammy/grammy-rdt.py
 prune test

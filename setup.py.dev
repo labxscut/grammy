@@ -99,10 +99,10 @@ setup(name="grammy",
                       'Topic :: Biological Sciences',
                 ],
   entry_points = { 'console_scripts': [
-      'grammy-rdt = grammy.grammy-rdt:main',
-      'grammy-gdt = grammy.grammy-gdt:main',
-      'grammy-pre = grammy.grammy-pre:main',
-      'grammy-em = grammy-em:main',
-      'grammy-post = grammy-post:main'
+      'grammy_rdt = grammy.grammy_rdt:main',
+      'grammy_gdt = grammy.grammy_gdt:main',
+      'grammy_pre = grammy.grammy_pre:main',
+      'grammy_em = grammy.grammy_em:main',
+      'grammy_post = grammy.grammy_post:main'
   ] },
 )
