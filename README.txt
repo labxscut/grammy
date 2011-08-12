@@ -1,4 +1,4 @@
-README.txt(v1.0.0)
+README.txt
 
 
 INTRODUCTION:
@@ -30,7 +30,6 @@ FILES:
     MANIFEST.in
     setup.py
     grammy/*
-    doc/*
 
 INSTALL:
 
@@ -57,8 +56,8 @@ INSTALL:
 
     [Development]
 
-    GRAMMy is open source and the version controled repository is at at:
-    https://bitbucket.org/charade/grammy.
+    GRAMMy is open source and the version controled repository is @:
+    	https://bitbucket.org/charade/grammy.
     Use mercurial tools (http://mercurial.selenic.com) to download a local copy:
         $hg clone ssh://hg@bitbucket.org/charade/grammy grammy-tip
 
@@ -76,13 +75,8 @@ EXECUTABLES:
 USAGE:
     (i) Above executables will be available from your python scripts directory.
     	Use '-h' to read individual script usage.
-    (ii) A pre-structured genome and taxon directory if required for grammy_gdt.py;
+    (ii) A pre-structured genome and taxon directory is required for grammy_gdt.py;
     	An example is available as the grefs.tgz file.
     	The file can be downloaded from http://meta.usc.edu/softs/grammy/grefs.tgz
     (iii) A simple test example is available at 'test/test.sh' and explained with in.
 
-DOCUMENTATION:
-    (i) developement information of grammy sub modules, e.g. grammy.gemlib model,
-    	can be viewed by issuing "pydoc grammy.gemlib" command on command line. 
-    (ii) information of how to use this package for analysis data by examples can
-    	be found in documentation in "doc" subdirectory. (this is not up2date)
