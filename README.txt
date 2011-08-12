@@ -1,12 +1,12 @@
 README.txt(v1.0.0)
 
 
-PACKAGE NAME:
+INTRODUCTION:
     Genome Relative Abundance using Mixture Model thoery (GRAMMy)
     Currently the package works for Linux (Ubuntu) and Mac (Snow Leopard) platforms.
     It might be work for Windows with Cygwin (not tested).
 
-DEPENDENCY:
+DEPENDENCIES:
     C++ build environment
 	e.g. build-essentials and libstdc++ in Ubuntu and Xcode in Mac 
     Python(>=2.7) with developemnt and setuptools
@@ -33,7 +33,41 @@ FILES:
     test/*
 
 INSTALL:
-    Refer to INSTALL.txt
+
+    [Prerequisites]
+
+    Please fullfill the prerequisites of C++, python (with development and setuptools),
+    numpy, scipy and biopython as described in README.txt before installing GRAMMy.
+
+    [Linux] (Ubuntu)
+
+    Download the latest release of GRAMMy from http://meta.usc.edu/softs/grammy.
+    Follow standard python module setup to install:
+        $tar -zxvf grammy-x.x.x.tar.gz
+        $cd grammy-x.x.x
+        $python setup.py install
+
+    [MAC] (Snow Leopard)
+
+    Download the latest release of GRAMMy from http://meta.usc.edu/softs/grammy.
+    Follow standard python module setup to install:
+        $tar -zxvf grammy-x.x.x.tar.gz
+        $cd grammy-x.x.x
+        $python setup.py install
+
+    [Development]
+
+     GRAMMy is open source and the version controled repository is at at:
+     https://bitbucket.org/charade/grammy.
+     Use mercurial tools (http://mercurial.selenic.com) to download a local copy:
+        $hg clone ssh://hg@bitbucket.org/charade/grammy
+
+    Follow standard python module setup to install:
+        $tar -zxvf grammy-x.x.x.tar.gz
+        $cd grammy-x.x.x
+        $python setup.py install
+
+    Note: x.x.x is the version number.
 
 EXECUTABLES:
     grammy-gdt
