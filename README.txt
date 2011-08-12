@@ -4,7 +4,9 @@ README.txt(v1.0.0)
 INTRODUCTION:
     Genome Relative Abundance using Mixture Model thoery (GRAMMy)
     Currently the package works for Linux (Ubuntu) and Mac (Snow Leopard) platforms.
-    It might be work for Windows with Cygwin (not tested).
+    It might work for Windows with Cygwin (not tested).
+    More current information of this package is available @
+	http://meta.usc.edu/softs/grammy
 
 DEPENDENCIES:
     C++ build environment
@@ -25,7 +27,6 @@ DEPENDENCIES:
 FILES:
     LICENSE.txt
     README.txt
-    INSTALL.txt
     MANIFEST.in
     setup.py
     grammy/*
@@ -36,7 +37,7 @@ INSTALL:
 
     [Prerequisites]
 
-    Please fullfill the prerequisites of C++, python (with development and setuptools),
+    Please fullfill the prerequisites of C++, Python (with development and setuptools),
     numpy, scipy and biopython as described in README.txt before installing GRAMMy.
 
     [Linux] (Ubuntu)
@@ -57,9 +58,9 @@ INSTALL:
 
     [Development]
 
-     GRAMMy is open source and the version controled repository is at at:
-     https://bitbucket.org/charade/grammy.
-     Use mercurial tools (http://mercurial.selenic.com) to download a local copy:
+    GRAMMy is open source and the version controled repository is at at:
+    https://bitbucket.org/charade/grammy.
+    Use mercurial tools (http://mercurial.selenic.com) to download a local copy:
         $hg clone ssh://hg@bitbucket.org/charade/grammy
 
     Follow standard python module setup to install:
