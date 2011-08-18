@@ -56,9 +56,9 @@ def main():
   parser.add_argument("btp", metavar= "btp", help="bootstrap file, from grammy-em")
   arg_namespace = parser.parse_args()
 
-  mix_par = arg_namespace['mix_par']
-  gen_dat = arg_namespace['gen_dat']
-  btp = arg_namespace['btp']
+  mix_par = vars(arg_namespace)['mix_par']
+  gen_dat = vars(arg_namespace)['gen_dat']
+  btp = vars(arg_namespace)['btp']
 
   gdt = gemaux.Genome_Data()
   gdt.read( gen_dat )

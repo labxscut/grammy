@@ -1,6 +1,7 @@
 import os, sys, subprocess, time, math, random
 import numpy as np
 import scipy as sp
+import scipy.io
 from Bio import SeqIO
 
 try:
@@ -102,7 +103,7 @@ class pMONO(pMEM):
     self.M = None
     for file in self.mmf:
       try:
-        tmp_info = sp.io.mminfo( file )
+        tmp_info = sp.io.mmio.mminfo( file )
       except IOError:
         sys.exit("exit from pMONO, can't open mmf file: %s!" % file)
       self.mmf_info[file] = [ int(v) for v in tmp_info[:3] ] # N, M, NNZ in order

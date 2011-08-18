@@ -71,17 +71,17 @@ def main():
     default="75,75,-5") 
   arg_namespace = parser.parse_args()
 
-  rdt_prefix = os.path.basename(arg_namespace['read_dat'])
+  rdt_prefix = os.path.basename(vars(arg_namespace)['read_dat'])
   rdt = gemaux.Read_Data()
   rdt.read( rdt_prefix )
 
-  gdt_prefix = os.path.basename(arg_namespace['gen_dat'])
+  gdt_prefix = os.path.basename(vars(arg_namespace)['gen_dat'])
   gdt = gemaux.Genome_Data()  
   gdt.read( gdt_prefix )
 
-  mtd = arg_namespace['mtd']
-  par1 = arg_namespace['par1']
-  par2 = arg_namespace['par2']
+  mtd = vars(arg_namespace)['mtd']
+  par1 = vars(arg_namespace)['par1']
+  par2 = vars(arg_namespace)['par2']
   
   if mtd == 'tbl':
 

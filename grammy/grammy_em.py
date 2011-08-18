@@ -45,12 +45,12 @@ except ImportError:
 
 def main():
 #  usage_error = """ type %s -h for more information """ % os.path.basename(sys.argv[0])
-#  usage = """ %prog [options] read_prob_fileability.mtx(s)
+#  usage = """ %prog [options] read_prob_file.mt1,read_prob_file.mt2,...
 #Arguments:
-#  read_prob_fileability.mtx: input probability matrix file"""
+#  read_prob_file: input probability matrix file"""
 
   parser = argparse.ArgumentParser(description="grammy-em Commandline Tool")
-  parser.add_argument("read_prob.mtx", metavar= "read_prob_file", help="input read probability matrix file from grammy-pre")
+  parser.add_argument("read_prob_file", metavar= "read_prob_file", help="input read probability matrix file from grammy-pre")
   parser.add_argument("-b","--btp", dest="btp", type=int, help="bootstrap number, default=10", default=10)
   parser.add_argument("-t","--tol", dest="tol", type=float, help="tolerance for stopping, default=10e-6", default=.000001)
   parser.add_argument("-c","--mtd", dest="mtd", help="convergenece method, (U)niform, (L)ikelihood, default=U", choices=['U','L'], default='U')
@@ -58,12 +58,12 @@ def main():
   parser.add_argument("-i","--ini", dest="ini", help="initilization method, (M)oment, (R)andom, default=M", choices=['M','R'], default='M')
   arg_namespace = parser.parse_args()
 
-  read_prob_file = arg_namespace['read_prob_file']
-  btp = arg_namespace['btp']
-  tol = arg_namespace['tol']
-  mtd = arg_namespace['mtd']
-  mit = arg_namespace['mit']
-  ini = arg_namespace['ini']
+  read_prob_file = vars(arg_namespace)['read_prob_file']
+  btp = vars(arg_namespace)['btp']
+  tol = vars(arg_namespace)['tol']
+  mtd = vars(arg_namespace)['mtd']
+  mit = vars(arg_namespace)['mit']
+  ini = vars(arg_namespace)['ini']
 
   gem = gemlib.pMONO()
 

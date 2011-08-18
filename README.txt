@@ -2,9 +2,10 @@ README.txt
 
 
 INTRODUCTION:
-    Genome Relative Abundance using Mixture Model thoery (GRAMMy)
+    Genome Relative Abundance using Mixture Model thoery (GRAMMy).
     Currently the package works for Linux (Ubuntu) platforms.
-    It might work for Windows with Cygwin (not tested).
+    It might work for Windows with Cygwin and Mac with Xcode and Mac ports (not tested).
+    It requires the Standard C++ Library with Technical Draft One.
     More current information of this package is available @
 	http://meta.usc.edu/softs/grammy
 

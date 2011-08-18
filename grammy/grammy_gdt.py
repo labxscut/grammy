@@ -53,11 +53,11 @@ def main():
   parser.add_argument("-p","--per", dest="per", type=int, help="number of genomes per file, default=20", default=20)
   arg_namespace = parser.parse_args()
 
-  taxids = [int(v) for v in arg_namespace['taxids'].split(',')]
-  o_prefix = arg_namespace['o_prefix']
-  dmp = arg_namespace['dmp']
-  ref = arg_namespace['ref']
-  per = arg_namespace['per']
+  taxids = [int(v) for v in vars(arg_namespace)['taxids'].split(',')]
+  o_prefix = vars(arg_namespace)['o_prefix']
+  dmp = vars(arg_namespace)['dmp']
+  ref = vars(arg_namespace)['ref']
+  per = vars(arg_namespace)['per']
 
   gdata = gemaux.Genome_by_gref( taxids=taxids, o_prefix=o_prefix, dmp_file=dmp, gref_dir=ref, per_set=per ) 
   gdata.write( o_prefix )
