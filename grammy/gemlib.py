@@ -1,11 +1,12 @@
-import os, sys, subprocess, time
-import math, random
+import os, sys, subprocess, time, math, random
 import numpy as np
 import scipy as sp
-from scipy.io import mmio
 from Bio import SeqIO
-from math import sqrt
-from grammy import gemcore
+
+try:
+  from grammy import gemcore
+except ImportError:
+  import gemcore
 
 def gclassify_one(cdata, C, gdt, genomes_records, L, K, i):
 

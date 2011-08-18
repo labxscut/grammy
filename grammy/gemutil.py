@@ -1,6 +1,9 @@
 import os, sys, tempfile, shutil, subprocess, time
 from Bio import SeqIO
-from grammy import gemlib
+try:
+  from grammy import gemlib
+except ImportError:
+  import gemlib
 
 # if nprocs == 1, go this way
 def simple_wet_run( rdata, gdata, bootstraps, model_par, algor ):

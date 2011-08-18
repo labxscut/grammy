@@ -3,7 +3,7 @@ README.txt
 
 INTRODUCTION:
     Genome Relative Abundance using Mixture Model thoery (GRAMMy)
-    Currently the package works for Linux (Ubuntu) and Mac (Snow Leopard) platforms.
+    Currently the package works for Linux (Ubuntu) platforms.
     It might work for Windows with Cygwin (not tested).
     More current information of this package is available @
 	http://meta.usc.edu/softs/grammy
@@ -21,7 +21,6 @@ DEPENDENCIES:
         download @ http://biopython.org/
     
     For setting up the dependencies, users may refer to the author's development document @
-	http://dl.dropbox.com/u/35182955/Mac_development_environment.html
 	http://dl.dropbox.com/u/35182955/Ubuntu_development_environment.html
 
 FILES:
@@ -39,14 +38,6 @@ INSTALL:
     numpy, scipy and biopython as described in README.txt before installing GRAMMy.
 
     [Linux] (Ubuntu)
-
-    Download the latest release of GRAMMy from http://meta.usc.edu/softs/grammy.
-    Follow standard python module setup to install:
-        $tar -zxvf charade-grammy-release.tar.gz
-        $cd charade-grammy-release
-        $python setup.py install
-
-    [MAC] (Snow Leopard)
 
     Download the latest release of GRAMMy from http://meta.usc.edu/softs/grammy.
     Follow standard python module setup to install:

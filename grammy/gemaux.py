@@ -1,10 +1,12 @@
 #Lsat Updated: Aug 25, 2010
 #ADD: init function for Read_Data and Genome_Data type 
 
-import time, os, sys, subprocess, csv, re, random, string
-import tarfile, gzip, fnmatch
-import gemaux
+import time, os, sys, subprocess, csv, re, random, string, tarfile#, gzip, fnmatch
 from Bio import SeqIO
+try:
+  from grammy import gemaux
+except ImportError:
+  import gemaux
 
 class Read_Data:
   def __init__(self):
