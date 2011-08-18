@@ -30,6 +30,7 @@ FILES:
     MANIFEST.in
     setup.py
     grammy/*
+    test/*
 
 INSTALL:
 
@@ -45,6 +46,8 @@ INSTALL:
         $tar -zxvf charade-grammy-release.tar.gz
         $cd charade-grammy-release
         $python setup.py install
+        $cd test
+        $. test.sh
 
     [Development]
 
