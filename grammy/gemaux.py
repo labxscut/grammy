@@ -1,74 +1,43 @@
 #Lsat Updated: Aug 25, 2010
 #ADD: init function for Read_Data and Genome_Data type 
 
-import time, os, sys, subprocess, csv, re, random, string, tarfile#, gzip, fnmatch
+import time, os, sys, subprocess, csv, re, random, string
+import tarfile, gzip, fnmatch
 from Bio import SeqIO
-try:
-  from grammy import gemaux
-except ImportError:
-  import gemaux
 
 class Read_Data:
+  """base read data class"""
   def __init__(self):
     self.read_length = None      # average read length
     self.read_tech = None        # sequencing technology
-    self.reads_file = []       # file contains reads
+    self.reads_file = []         # file contains reads
     self.reads_number = None     # either use the # of seqs from reads_file or this
-    #self.reads_files = None      # if the reads data is a set of reads file
-
-  def write(self, o_prefix):
-    rdt_out = open( o_prefix+".rdt", 'w' )
-    print >>rdt_out, "rdata=gemaux.Read_Data()"
-    print >>rdt_out, "rdata.read_tech=", "'%s'" % self.read_tech
-    print >>rdt_out, "rdata.reads_file=", "'%s'" % self.reads_file
-    print >>rdt_out, "rdata.read_length=", self.read_length
-    print >>rdt_out, "rdata.reads_number=", self.reads_number
-
-  def read(self, i_prefix):
-    #execfile( i_prefix+".rdt" )
-    for line in open( i_prefix+".rdt" ).readlines():
-      exec(line)
-    self.read_length = rdata.read_length
-    self.read_tech = rdata.read_tech
-    self.reads_file = rdata.reads_file
-    self.reads_number = rdata.reads_number
+    self.reads_files = None      # if the reads data is a set of reads file
 
 class Genome_Data:
+  """base genome data class"""
   def __init__(self):
     self.taxids = None           # taxids of interest
     self.taxid_genomes = None    # taxid_genomes correspondence 
                                  # one taxid may corespondence to several genomes and each genome with lots of sequence 
     self.gi_taxid = None         # gi_taxid correspondence, each gi has one taxid but each taxid may have a bunch of gis
     self.genomes_file = []       # file containing sequences of all genomes, can be in series from .1, .2, ...
-    #self.taxids_number = None    # either use this or use len(taxids) or len(taxid_genomes)
+    self.taxids_number = None    # either use this or use len(taxids) or len(taxid_genomes)
     self.taxid_length = None     # genome length for taxid
 
-  def write(self, o_prefix):
-    gdt_out = open( o_prefix+".gdt", 'w' )
-    print >>gdt_out, "gdata=gemaux.Genome_Data()"
-    print >>gdt_out, "gdata.taxids=", self.taxids
-    print >>gdt_out, "gdata.taxid_genomes=", self.taxid_genomes 
-    print >>gdt_out, "gdata.gi_taxid=", self.gi_taxid
-    print >>gdt_out, "gdata.genomes_file=", self.genomes_file
-    print >>gdt_out, "gdata.taxid_length=", self.taxid_length
-
-  def read(self, i_prefix):
-    #execfile( i_prefix+".gdt" )
-    for line in open( i_prefix+".gdt" ).readlines():
-      exec(line)
-    self.taxids = gdata.taxids
-    self.taxid_genomes = gdata.taxid_genomes
-    self.gi_taxid = gdata.gi_taxid
-    self.genomes_file = gdata.genomes_file
-    self.taxid_length = gdata.taxid_length
-
-class Sim_Read_Data(Read_Data):
+class Sim_Read_Data(Read_Data):  # inherit not for memebers
+  """sim read data class"""
   def __init__(self):
+    #self.read_length = None      # average read length
+    #self.read_tech = None        # sequencing technology
+    #self.reads_file = []         # file contains reads
+    #self.reads_number = None     # either use the # of seqs from reads_file or this
+    #self.reads_files = None      # if the reads data is a set of reads file
     self.gdt = Genome_Data()     # Genome_Data used to simulate the reads
                                  # require: gdt.taxids, gdt.taxid_genomes, gdt.gi_taxid, gdt.genomes_file, gdt.genome_number
     self.taxid_reads = None      # taxid_reads correspondence of simulated reads
     self.abundance = None        # abundance vector used to simulate the reads
-    self.reads_numbers = None    # reads_number for each taxid
+    self.reads_numbers = None    # reads_number for each taxid, different from reads_number
     self.error_model = None      # error model used to generate the reads set
 
 def Read_by_File( rf, rt, rl, format='fasta' ):
@@ -383,7 +352,7 @@ def Read_by_MetaSim( gdata, abd, o_prefix, o_set, rnumber=100, rlength=400, rtec
   #rdata.taxid_genomes = gdata.taxid_genomes
   rdata.taxid_reads = dict()
   rdata.read_length = rlength
-  rdata.read_number = rnumber
+  rdata.reads_number = rnumber
   rdata.read_tech = rtech
   rdata.abundance = abd 
   rdata.error_model = 'Exact' 
@@ -420,7 +389,8 @@ def Read_by_MetaSim( gdata, abd, o_prefix, o_set, rnumber=100, rlength=400, rtec
   proc0 = subprocess.Popen(args0, shell=True)
   proc0.wait()
   args1 = metasim_cmd + " cmd -s --threads 0 -d %s -r%s -f%s -t0 %s %s 2>&1 >%s " % ( 
-      out_dir, str(rdata.read_number), str(rdata.read_length), error_flag, mprf_out_name, reads_in_name+".log" )
+      out_dir, str(rdata.reads_number), str(rdata.read_length), error_flag, mprf_out_name, reads_in_name+".log" )
+  print >>sys.stderr, args1
   run_metasim( args1 ) 
   args2 = " mv %s %s " % (metasim_out_name, reads_in_name)
   proc2 = subprocess.Popen(args2, shell=True)
@@ -437,7 +407,7 @@ def Read_by_MetaSim( gdata, abd, o_prefix, o_set, rnumber=100, rlength=400, rtec
   reads_in_file = open( reads_in_name, "r" )
   n = 0
   for seq_rec in SeqIO.parse(reads_in_file, "fasta"):
-    gi = (re.search('GI=(\d+)', seq_rec.description)).group(1) 
+    gi = int((re.search('GI=(\d+)', seq_rec.description)).group(1))
     if gdata.gi_taxid[ gi ] in rdata.taxid_reads:
       rdata.taxid_reads[ gdata.gi_taxid[ gi ] ].append(n)
     else:
