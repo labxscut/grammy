@@ -44,7 +44,7 @@ doclines=__doc__.splitlines()
 
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 
-#os.environ['CC'] = 'g++'  #temporary measure to trick distutils use g++, need update to distutils2
+os.environ['CC'] = 'g++'  #temporary measure to trick distutils use g++, need update to distutils2
 
 class my_build(build.build):
 # different order: build_ext *before* build_py, so that 
@@ -73,8 +73,8 @@ setup(name="grammy",
                       depends=['grammy/gemcore.hpp', 'grammy/mmio.h'],
                       language ='c++',
                       libraries = ['stdc++'],  #trick to seduce distutils use g++ instead of gcc
-                      include_dirs = [ os.environ['HOME']+'/usr/include' ],
-                      library_dirs = [ os.environ['HOME']+'/usr/lib' ],
+                      #include_dirs = [ os.environ['HOME']+'/usr/include' ],
+                      #library_dirs = [ os.environ['HOME']+'/usr/lib' ],
                   ),
                 ],
   py_modules = ['grammy.gemcore', 'grammy.gemlib', 'grammy.gemaux', 'grammy.gemmath', 'grammy.gemutil'],
