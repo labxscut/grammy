@@ -1,4 +1,4 @@
-rdata=gemaux.Read_Data()
+rdata=Read_Data()
 rdata.read_tech= 'sanger'
 rdata.reads_file= 'c0_L100_N1000_S1.fasta.gz'
 rdata.read_length= 100

@@ -5,14 +5,31 @@ import time, os, sys, subprocess, csv, re, random, string
 import tarfile, gzip, fnmatch
 from Bio import SeqIO
 
+#global rdata, gdata #reserved for rdt and gdt file import
+
 class Read_Data:
   """base read data class"""
   def __init__(self):
     self.read_length = None      # average read length
     self.read_tech = None        # sequencing technology
-    self.reads_file = []         # file contains reads
+    self.reads_file = None       # file contains reads
     self.reads_number = None     # either use the # of seqs from reads_file or this
     self.reads_files = None      # if the reads data is a set of reads file
+  
+  def write(self, prefix):
+    rdt_file = open(prefix+".rdt", 'w')
+    print >>rdt_file, "rdata=Read_Data()"
+    print >>rdt_file, "rdata.read_tech= '"+str(self.read_tech)+"'"
+    print >>rdt_file, "rdata.reads_file= '"+str(self.reads_file)+"'"
+    print >>rdt_file, "rdata.read_length= %d" % self.read_length
+    print >>rdt_file, "rdata.reads_number= %d" % self.reads_number
+
+  def read(self, prefix):
+    exec open(prefix+".rdt").read()
+    self.read_length = rdata.read_length
+    self.read_tech = rdata.read_tech
+    self.reads_file = rdata.reads_file
+    self.reads_number = rdata.reads_number
 
 class Genome_Data:
   """base genome data class"""
@@ -24,6 +41,24 @@ class Genome_Data:
     self.genomes_file = []       # file containing sequences of all genomes, can be in series from .1, .2, ...
     self.taxids_number = None    # either use this or use len(taxids) or len(taxid_genomes)
     self.taxid_length = None     # genome length for taxid
+
+  def write(self, prefix):
+    gdt_file = open(prefix+".gdt", 'w')
+    print >>gdt_file, "gdata=Genome_Data()"
+    print >>gdt_file, "gdata.taxids=" +str(self.taxids)
+    print >>gdt_file, "gdata.taxid_genomes= "+str(self.taxid_genomes)
+    print >>gdt_file, "gdata.gi_taxid=" +str(self.gi_taxid)
+    print >>gdt_file, "gdata.genomes_file="+str(self.genomes_file)
+    print >>gdt_file, "gdata.taxid_length="+str(self.taxid_length)
+
+  def read(self, prefix):
+    exec open(prefix+".gdt").read()
+    self.taxids = gdata.taxids
+    self.taxid_genomes = gdata.taxid_genomes
+    self.gi_taxid = gdata.gi_taxid
+    self.genomes_file = gdata.genomes_file
+    self.taxids_number = gdata.taxids_number
+    self.taxid_length = gdata.taxid_length
 
 class Sim_Read_Data(Read_Data):  # inherit not for memebers
   """sim read data class"""
@@ -41,18 +76,18 @@ class Sim_Read_Data(Read_Data):  # inherit not for memebers
     self.error_model = None      # error model used to generate the reads set
 
 def Read_by_File( rf, rt, rl, format='fasta' ):
-  rdata = Read_Data()
-  rdata.read_tech = rt
-  rdata.read_length = rl
-  rdata.reads_file = rf
+  rdt = Read_Data()
+  rdt.read_tech = rt
+  rdt.read_length = rl
+  rdt.reads_file = rf
   rn = 1
   for seq in SeqIO.parse( open(rf, 'r'), format):
     rn += 1
-  rdata.reads_number = rn
-  return rdata
+  rdt.reads_number = rn
+  return rdt
 
 def Genome_by_gref( taxids, o_prefix, dmp_file="grefs/gid_tid.dmp", gref_dir="grefs", per_set=20 ):
-  gdata = Genome_Data()
+  gdt = Genome_Data()
   gi_2_ti = dict()
   taxids_set = set(taxids)
 
@@ -79,13 +114,13 @@ def Genome_by_gref( taxids, o_prefix, dmp_file="grefs/gid_tid.dmp", gref_dir="gr
       SeqIO.write([seq_rec], genomes_out_handle, 'fasta')
   print >>sys.stderr, "loaded %d" % cnt, "seqs into %d" % (len(taxids)/per_set+1), "files"
       
-  gdata.taxid_genomes = ti_2_record
-  gdata.gi_taxid = gi_2_ti
-  gdata.taxids = taxids
-  gdata.taxid_length = ti_gl
-  gdata.taxid_number = len(taxids)
-  gdata.genomes_file = genomes_file
-  return gdata
+  gdt.taxid_genomes = ti_2_record
+  gdt.gi_taxid = gi_2_ti
+  gdt.taxids = taxids
+  gdt.taxid_length = ti_gl
+  gdt.taxid_number = len(taxids)
+  gdt.genomes_file = genomes_file
+  return gdt
 
 def Genome_by_NCBI( taxids, o_prefix, taxids_universe, dummy_mode=False, dmp_file="gi_taxid_nucl.dmp", fna_file=None, add_file=None,
     complete_dir='genbank/Bacteria', draft_dir=None ): 
@@ -96,7 +131,7 @@ def Genome_by_NCBI( taxids, o_prefix, taxids_universe, dummy_mode=False, dmp_fil
 
   # constructing Genome_Data from standard files of NCBI taxonomy
   # drop those ids that do not 
-  gdata = Genome_Data()
+  gdt = Genome_Data()
 
   # genomes output file name
   genomes_out_name = o_prefix+".fna"
@@ -308,30 +343,30 @@ def Genome_by_NCBI( taxids, o_prefix, taxids_universe, dummy_mode=False, dmp_fil
   print >>sys.stderr, "Time: \n %d s" % ( end_time - start_time )
   #print "=========EOSC========="
 
-  gdata.genomes_file = genomes_out_name  
-  gdata.taxid_genomes = ti_2_record
-  gdata.gi_taxid = gi_2_ti
-  #gdata.taxids = gdata.taxid_genomes.keys() # order of taxid_genomes doesn't matter?
-  gdata.taxids = taxids
-  gdata.taxids_number = len(gdata.taxids)
-  gdata.taxid_length = ti_gl
-  #gdata.taxids = taxids
-  #gdata.taxids_number = len(taxids)
-  #if len(gdata.taxids) != len(gdata.taxid_genomes):
-  #  print >>sys.stderr, gdata.taxids
-  #  print >>sys.stderr, gdata.taxid_genomes.keys()
+  gdt.genomes_file = genomes_out_name  
+  gdt.taxid_genomes = ti_2_record
+  gdt.gi_taxid = gi_2_ti
+  #gdt.taxids = gdt.taxid_genomes.keys() # order of taxid_genomes doesn't matter?
+  gdt.taxids = taxids
+  gdt.taxids_number = len(gdt.taxids)
+  gdt.taxid_length = ti_gl
+  #gdt.taxids = taxids
+  #gdt.taxids_number = len(taxids)
+  #if len(gdt.taxids) != len(gdt.taxid_genomes):
+  #  print >>sys.stderr, gdt.taxids
+  #  print >>sys.stderr, gdt.taxid_genomes.keys()
   #  print >>sys.stderr, "Some ti not found in NCBI, leave them out..."
-  return gdata
+  return gdt
 
-def Genome_Data_Clean( gdata ):
-  """ clean gdata and remove taxids that don't have genomes represented in NCBI refseq """
+def Genome_Data_Clean( gdt ):
+  """ clean gdt and remove taxids that don't have genomes represented in NCBI refseq """
   present_ids = []
-  for ti in gdata.taxids:
-    if ti in gdata.taxid_genomes.keys():
+  for ti in gdt.taxids:
+    if ti in gdt.taxid_genomes.keys():
       present_ids.append(ti)
-  gdata.taxids = present_ids
-  gdata.taxids_number = len(gdata.taxids)
-  return gdata
+  gdt.taxids = present_ids
+  gdt.taxids_number = len(gdt.taxids)
+  return gdt
 
 # help function to run the simulator: MetaSim
 def run_metasim( args ):
@@ -340,46 +375,46 @@ def run_metasim( args ):
   proc.wait()
   print "metasim ok"
 
-def Read_by_MetaSim( gdata, abd, o_prefix, o_set, rnumber=100, rlength=400, rtech='454', metasim_cmd="$HOME/app/metasim/MetaSim", error=False ):          
+def Read_by_MetaSim( gdt, abd, o_prefix, o_set, rnumber=100, rlength=400, rtech='454', metasim_cmd="$HOME/app/metasim/MetaSim", error=False ):          
   # suppose the MetaSim has already been updated
 
   out_dir = os.path.split(o_prefix)[0]
 
-  rdata = Sim_Read_Data() 
-  rdata.gdt = gdata
-  #rdata.taxids = gdata.taxids
-  #rdata.genomes_file = gdata.genomes_file
-  #rdata.taxid_genomes = gdata.taxid_genomes
-  rdata.taxid_reads = dict()
-  rdata.read_length = rlength
-  rdata.reads_number = rnumber
-  rdata.read_tech = rtech
-  rdata.abundance = abd 
-  rdata.error_model = 'Exact' 
+  rdt = Sim_Read_Data() 
+  rdt.gdt = gdt
+  #rdt.taxids = gdt.taxids
+  #rdt.genomes_file = gdt.genomes_file
+  #rdt.taxid_genomes = gdt.taxid_genomes
+  rdt.taxid_reads = dict()
+  rdt.read_length = rlength
+  rdt.reads_number = rnumber
+  rdt.read_tech = rtech
+  rdt.abundance = abd 
+  rdt.error_model = 'Exact' 
   out_flag = '-Exact'
   error_flag = ''
   if error:
-    if rdata.read_length >= 400:
-      rdata.error_model = 'Sanger'
+    if rdt.read_length >= 400:
+      rdt.error_model = 'Sanger'
       out_flag = '-Sanger'
       error_flag = ' --sanger '
-    elif rdata.read_length >= 50:
-      rdata.error_model = '454'
+    elif rdt.read_length >= 50:
+      rdt.error_model = '454'
       out_flag = '-454'
       error_flag = ' --454 '
     else:
-      rdata.error_model = 'Empirical'
+      rdt.error_model = 'Empirical'
       out_flag = '-Empirical'
       error_flag = ' --empirical '
   mprf_out_name = o_prefix+"_L"+str(rlength)+"_N"+str(rnumber)+"_S"+str(o_set)+".mprf"
   reads_in_name = o_prefix+"_L"+str(rlength)+"_N"+str(rnumber)+"_S"+str(o_set)+".fasta"
   metasim_trace = o_prefix+"_L"+str(rlength)+"_N"+str(rnumber)+"_S"+str(o_set)+"%s.tarce.gz" % out_flag
   metasim_out_name = o_prefix+"_L"+str(rlength)+"_N"+str(rnumber)+"_S"+str(o_set)+"%s.fna" % out_flag
-  rdata.reads_file = reads_in_name
+  rdt.reads_file = reads_in_name
 
   mprf_out_file = open( mprf_out_name, "w" )
-  for i in range(0,len(gdata.taxids)):
-    print >>mprf_out_file, rdata.abundance[i], '\t', "taxid", '\t', gdata.taxids[i]
+  for i in range(0,len(gdt.taxids)):
+    print >>mprf_out_file, rdt.abundance[i], '\t', "taxid", '\t', gdt.taxids[i]
   mprf_out_file.close() 
   # this must be the reason cause metasim to fail
   # mprf_out_file cannot read by java if it is still open with python
@@ -389,7 +424,7 @@ def Read_by_MetaSim( gdata, abd, o_prefix, o_set, rnumber=100, rlength=400, rtec
   proc0 = subprocess.Popen(args0, shell=True)
   proc0.wait()
   args1 = metasim_cmd + " cmd -s --threads 0 -d %s -r%s -f%s -t0 %s %s 2>&1 >%s " % ( 
-      out_dir, str(rdata.reads_number), str(rdata.read_length), error_flag, mprf_out_name, reads_in_name+".log" )
+      out_dir, str(rdt.reads_number), str(rdt.read_length), error_flag, mprf_out_name, reads_in_name+".log" )
   print >>sys.stderr, args1
   run_metasim( args1 ) 
   args2 = " mv %s %s " % (metasim_out_name, reads_in_name)
@@ -408,14 +443,14 @@ def Read_by_MetaSim( gdata, abd, o_prefix, o_set, rnumber=100, rlength=400, rtec
   n = 0
   for seq_rec in SeqIO.parse(reads_in_file, "fasta"):
     gi = int((re.search('GI=(\d+)', seq_rec.description)).group(1))
-    if gdata.gi_taxid[ gi ] in rdata.taxid_reads:
-      rdata.taxid_reads[ gdata.gi_taxid[ gi ] ].append(n)
+    if gdt.gi_taxid[ gi ] in rdt.taxid_reads:
+      rdt.taxid_reads[ gdt.gi_taxid[ gi ] ].append(n)
     else:
-      rdata.taxid_reads[ gdata.gi_taxid[ gi ] ] = [n] 
+      rdt.taxid_reads[ gdt.gi_taxid[ gi ] ] = [n] 
     n += 1
   reads_in_file.close()
 
-  return rdata
+  return rdt
   # generate genome file taxids only
 
 def Taxid_by_GOLD( keyword='Bacteria|Archaea', ci=0, gold_file="gold_published_table.txt" ):

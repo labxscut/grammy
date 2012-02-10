@@ -60,7 +60,7 @@ def main():
   parser = argparse.ArgumentParser(description="grammy-pre Commandline Tool")
   parser.add_argument("read_dat", metavar= "read_dat", help="will use read_dat.rdt as read data file")
   parser.add_argument("gen_dat", metavar= "gen_dat", help="will use gen_dat.gdt as genome data file")
-  parser.add_argument("-m","--mtd", dest="mtd", choices=['tbl']
+  parser.add_argument("-m","--mtd", dest="mtd", choices=['tbl'],
     help="method for read assignment,\n  tbl -- tabular blast format",
     default='tbl')
   parser.add_argument("-p","--par1", dest="par1",
