@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
 ###the script is an test example of grammy with step to step explanation, they are also echoed###
+echo "###get the sample genome references file"""
+echo "wget http://meta.usc.edu/softs/grammy/grefs.tgz"
+wget "http://meta.usc.edu/softs/grammy/grefs.tgz"
+echo "tar -zxvf grefs.tgz"
+tar -zxvf grefs.tgz
+
 echo "###the script is an test example of grammy with step to step explanation###"
 echo "###put grefs under this test directory###"
 
