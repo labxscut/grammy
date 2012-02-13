@@ -42,7 +42,7 @@ INSTALL:
 	at http://www.virtualbox.org
 
     2. Download the SunLab Virtual Box, 
-	at http://
+	at http://meta.usc.edu/softs/vbox/SunLab.vdi
 	This file is large so it may take
 	between a few minutes and a few hours depending on your Internet connection
 	speed. You will need to unzip this file, which you can typically do by
