@@ -5,7 +5,7 @@ echo "###get the sample genome references file"""
 if [ ! -d grefs ]
 then
 	echo "wget http://meta.usc.edu/softs/grammy/grefs.tgz"
-	wget "http://meta.usc.edu/softs/grammy/grefs.tgz -O grefs.tgz"
+	wget "http://meta.usc.edu/softs/grammy/grefs.tgz" -O grefs.tgz
 	echo "tar -zxvf grefs.tgz"
 	tar -zxvf grefs.tgz
 fi
