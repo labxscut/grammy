@@ -45,6 +45,7 @@ echo "grammy_em c0_L100_N1000_S1.mtx"
 
 grammy_em c0_L100_N1000_S1.mtx
 
+echo "#use '-b 0 -i M -c U -t 0.01' to greatly reduce computation time by sacrificing a little accuracy" 
 echo "#we have three new files"
 echo "#c0_L100_N1000_S1.est, where the estimation is, not normalized"
 echo "#c0_L100_N1000_S1.btp, where the extra bootstrap estimations are"
