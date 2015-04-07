@@ -1,3 +1,9 @@
 /grammy/test-for-bam.tar.gz filter=lfs diff=lfs merge=lfs -text
+/grammy/test-for-bam/refseqs.fna filter=lfs diff=lfs merge=lfs -text
 /test/test.fna.1 filter=lfs diff=lfs merge=lfs -text
 /test/test.fna.2 filter=lfs diff=lfs merge=lfs -text
+/grammy/test-for-bam/refseqs.1.ebwt filter=lfs diff=lfs merge=lfs -text
+/grammy/test-for-bam/refseqs.2.ebwt filter=lfs diff=lfs merge=lfs -text
+/grammy/test-for-bam/refseqs.4.ebwt filter=lfs diff=lfs merge=lfs -text
+/grammy/test-for-bam/refseqs.rev.1.ebwt filter=lfs diff=lfs merge=lfs -text
+/grammy/test-for-bam/refseqs.rev.2.ebwt filter=lfs diff=lfs merge=lfs -text

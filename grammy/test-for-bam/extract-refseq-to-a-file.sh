@@ -1,0 +1,7 @@
+#! /usr/bin/bash
+
+for arg in "$@"
+do 
+    echo $arg
+    cat /media/Elements/huang/Practice/grammy/grefs/$arg/genomes.fna >> ./refseqs.fna
+done
