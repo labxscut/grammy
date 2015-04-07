@@ -1,0 +1,12 @@
+#cd test-for-sam to run the test
+#-p option needs indexed bam file
+
+python ../grammy_pre.py c0_L100_N1000_S1 test -m bam -p c0_L100_N1000_S1.bam
+                               |          |                   |
+                               |          |                   |
+                               |          |                   |
+                        rdt file prefix   |                   |
+                                     gdt prefix          indexed bam file prefix
+                                     
+                                     
+
