@@ -35,17 +35,19 @@ from Bio import SeqIO
 from scipy.io import mmio
 from scipy import sparse
 import scipy as sp
+import pysam
+import gemaux
 
 TMP_DIR = tempfile.mkdtemp()
 #BLD_DIR="build/lib.linux-%s-2.6/gem"
 #sys.path.append( BLD_DIR % platform.machine() )
 #from grammy import gemaux, gemlib, gemcore, gemmath, gemutil
-try:
+#try:
   #installed import
-  from grammy import gemaux, gemlib, gemcore, gemmath, gemutil
-except ImportError:
+#  from grammy import gemaux, gemlib, gemcore, gemmath, gemutil
+#except ImportError:
   #debug import
-  import gemaux, gemlib, gemcore, gemmath, gemutil
+#  import gemaux, gemlib, gemcore, gemmath, gemutil
   #np.seterr(all='raise')
 
 def main():
@@ -61,7 +63,7 @@ def main():
   parser.add_argument("read_dat", metavar= "read_dat", help="will use read_dat.rdt as read data file")
   parser.add_argument("gen_dat", metavar= "gen_dat", help="will use gen_dat.gdt as genome data file")
   parser.add_argument("-m","--mtd", dest="mtd", choices=['tbl','bam'],
-    help="method for read assignment,\n  tbl -- tabular blast format",
+    help="method for read assignment,\n  tbl -- tabular blast format,\n  bam --bam format file(need indexed)",
     default='tbl')
   parser.add_argument("-p","--par1", dest="par1",
     help="first parameter for read assignment method, tbl filename or k",
@@ -114,7 +116,7 @@ def main():
 
     #parsing
     hits_set = []
-    for i in range(1,len(gdt.genomes_file)+1):
+    for i in range(1,len(gdt.genomes_file)):
       #
       tbl_file = (tbl_filename+".%d") % i
       current_gi = None
@@ -184,6 +186,90 @@ def main():
     sp.io.mmwrite( mtx_file, smm, comment='E_VALUE_THRESH=%s, ALG_LEN_THRESH=%s, MAPPED=%s, A_MAPPED=%s' \
         % (str(E_VALUE_THRESH), str(ALG_LEN_THRESH), str(mn), str(smm.nnz-mn)), field='real', precision=8 )
   
+########################################################################################################################## 
+  elif mtd == "bam":
+    
+    #construct dict{ idx: id }
+    read_genomes = dict()
+    rid_ri = dict()
+    rid_rl = dict()
+    i = 0
+
+    for seq in SeqIO.parse( gzip.open( rdt.reads_file ), 'fasta' ):
+      rid_ri[ seq.id ] = i
+      rid_rl[ seq.id ] = len(seq.seq)
+      i += 1
+    reads_number = i
+    kept = 0
+    
+    #ingredients
+    bam_filename = par1
+    bam_pars = [ int(v) for v in par2.split(',') ]
+    mtx_file = rdt_prefix+".mtx"
+    
+    #parsing parameters
+    ALG_LEN_THRESH = bam_pars[0]
+    ALG_ID_THRESH = bam_pars[1]
+    #E_VALUE_THRESH = 0.1**bam_pars[2]
+
+    #parsing bamfiles to needed counts
+    
+    for i in range(1,len(gdt.genomes_file)+1):
+      
+      bam_file = (bam_filename+".%d") % i
+     # temp = 0
+      bamfile_handle = pysam.AlignmentFile( bam_file )
+      for alignment in bamfile_handle.fetch():
+        align_length = 0
+        align_identity = alignment.query_length
+        #temp += 1
+        #if temp < 10:
+        for i, j in alignment.cigartuples:
+          if i == 0:
+            align_length = j
+          elif i == 7:
+            align_identity = j
+          
+        
+        if align_length >= ALG_LEN_THRESH and align_identity >= ALG_ID_THRESH:         
+          qi = rid_ri[ alignment.qname ]
+          gi = int(bamfile_handle.getrname(alignment.rname).split("|")[1])        
+          read_genomes.setdefault( qi, [] ).append( gdt.taxids.index(gdt.gi_taxid[gi]) )
+        
+    smm = sparse.lil_matrix( (reads_number, len(gdt.taxids)+1) ) # numpy matrix is addressed from 0, we need allocate one more for unknown
+    tnm = 0
+  
+    #first filling in mapped reads
+    mn = len(read_genomes)
+    for r in read_genomes:
+      #
+      counts = {}
+      nm = len(read_genomes[r])
+      for g in read_genomes[r]:
+        #
+        counts[g] = counts.get(g,0)+1 # fast counts unique elements in a list
+      for g in counts:
+        smm[r,g] = float( counts[g] )/gdt.taxid_length[ gdt.taxids[g] ]  # simplest counts and divide probability, perhaps E-value based, weighted probability 
+      tnm += nm
+    #assert tnm==kept
+  
+    #second imputing in unmapped reads with the average of mapped reads
+    unknown_impute = smm.sum()/smm.nnz
+    unknown_index = len( gdt.taxids )  # index starts from 0
+    unmapped_reads = 0
+    for r in range(0, reads_number):
+      #
+      if r not in read_genomes:
+        #
+        smm[r,unknown_index] = unknown_impute
+        unmapped_reads += 1
+    print >>sys.stderr, "generating matrix market file(.mtx)..."
+    sp.io.mmwrite( mtx_file, smm, comment='E_VALUE_THRESH=%s, MAPPED=%s, A_MAPPED=%s' \
+        % (#str(E_VALUE_THRESH), 
+           str(ALG_LEN_THRESH), str(mn), str(smm.nnz-mn)), field='real', precision=8 )    
+  
+  
+#########################################################################################################################  
   elif mtd == "kmer":
     #
     kmer_k = int(par1)
