@@ -11,7 +11,7 @@ INTRODUCTION:
 
 DEPENDENCIES:
     C++ build environment
-	e.g. build-essential and libstdc++6 in Ubuntu and Xcode in Mac 
+	e.g. build-essential and libstdc++6 in Ubuntu and Xcode in Mac
     Python(>=2.7) with developemnt and setuptools
         download @ http://www.python.org/
     Numpy(>=1.0)
@@ -20,7 +20,7 @@ DEPENDENCIES:
         download @ http://www.scipy.org/
     Biopython(>=1.0)
         download @ http://biopython.org/
-    
+
     For setting up the dependencies, users may refer to the author's development document @
 	http://dl.dropbox.com/u/35182955/Ubuntu_development_environment.html
 
@@ -35,13 +35,13 @@ FILES:
 INSTALL:
 
     [VirtualBox]
-    The procedure is similar to QIIME VirtualBox install, 
+    The procedure is similar to QIIME VirtualBox install,
 	see http://qiime.org/install/virtual_box.html.
 
     1. Download and install the VirtualBox (VB) version for your machine,
 	at http://www.virtualbox.org
 
-    2. Download the SunLab Virtual Box, 
+    2. Download the SunLab Virtual Box,
 	at http://meta.usc.edu/softs/vbox/SunLab.vdi.tgz
 	This file is large so it may take
 	between a few minutes and a few hours depending on your Internet connection
@@ -66,7 +66,7 @@ INSTALL:
 	then click Next.
 
         In the new window click Finish.
-	
+
     4. Double click on the new virtual machine created – it will be called SunLab
 	– to boot it for the first time. The default username and password is:
 	user.
@@ -82,23 +82,26 @@ INSTALL:
     [Linux] (Ubuntu)
 
     Download the latest release of GRAMMy from http://meta.usc.edu/softs/grammy.
-    Follow standard python module setup to install:
-        $tar -zxvf charade-grammy-release.tar.gz
-        $cd charade-grammy-release
-        $python setup.py install
-        $cd test
-        $. test.sh
+    Follow standard python module setup to install::
+
+        $ tar -zxvf charade-grammy-release.tar.gz
+        $ cd charade-grammy-release
+        $ python setup.py install
+        $ cd test
+        $ . test.sh
 
     [Development]
 
     GRAMMy is open source and the version controled repository is @:
     	https://bitbucket.org/charade/grammy.
     Use mercurial tools (http://mercurial.selenic.com) to download a local copy:
-        $hg clone ssh://hg@bitbucket.org/charade/grammy grammy-tip
 
-    Follow standard python module setup to install:
-        $cd grammy-tip
-        $python setup.py install
+        $ hg clone ssh://hg@bitbucket.org/charade/grammy grammy-tip
+
+    Follow standard python module setup to install::
+
+        $ cd grammy-tip
+        $ python setup.py install
 
 EXECUTABLES:
     grammy_gdt
