@@ -231,7 +231,8 @@ def main():
             align_identity = j
           
         
-        if align_length >= ALG_LEN_THRESH and align_identity >= ALG_ID_THRESH and alignment.mapping_quality >= MAPQ_THRESH:         
+        if align_length >= ALG_LEN_THRESH and align_identity >= ALG_ID_THRESH \
+         and alignment.mapping_quality >= MAPQ_THRESH and alignment.mapping_quality != 255:         
           qi = rid_ri[ alignment.qname ]
           gi = int(bamfile_handle.getrname(alignment.rname).split("|")[1])        
           read_genomes.setdefault( qi, [] ).append( gdt.taxids.index(gdt.gi_taxid[gi]) )
