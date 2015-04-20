@@ -30,7 +30,7 @@
 #THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import os, sys, tempfile, platform, gzip, argparse
-from Bio.Blast import NCBIStandalone
+#from Bio.Blast import NCBIStandalone
 from Bio import SeqIO
 from scipy.io import mmio
 from scipy import sparse
@@ -42,12 +42,12 @@ TMP_DIR = tempfile.mkdtemp()
 #BLD_DIR="build/lib.linux-%s-2.6/gem"
 #sys.path.append( BLD_DIR % platform.machine() )
 #from grammy import gemaux, gemlib, gemcore, gemmath, gemutil
-#try:
+try:
   #installed import
-#  from grammy import gemaux, gemlib, gemcore, gemmath, gemutil
-#except ImportError:
+  from grammy import gemaux, gemlib, gemcore, gemmath, gemutil
+except ImportError:
   #debug import
-#  import gemaux, gemlib, gemcore, gemmath, gemutil
+  import gemaux, gemlib, gemcore, gemmath, gemutil
   #np.seterr(all='raise')
 
 def main():
@@ -205,25 +205,25 @@ def main():
     #ingredients
     bam_filename = par1
     bam_pars = [ int(v) for v in par2.split(',') ]
-    mtx_file = rdt_prefix+".mtx"
+    mtx_file = rdt_prefix+".bam.mtx"
     
     #parsing parameters
     ALG_LEN_THRESH = bam_pars[0]
     ALG_ID_THRESH = bam_pars[1]
-    #E_VALUE_THRESH = 0.1**bam_pars[2]
+    if bam_pars[2] <= 0:
+      MAPQ_THRESH = 33
+    else:
+      MAPQ_THRESH = bam_pars[2]
 
     #parsing bamfiles to needed counts
     
     for i in range(1,len(gdt.genomes_file)+1):
       
       bam_file = (bam_filename+".%d") % i
-     # temp = 0
       bamfile_handle = pysam.AlignmentFile( bam_file )
       for alignment in bamfile_handle.fetch():
         align_length = 0
         align_identity = alignment.query_length
-        #temp += 1
-        #if temp < 10:
         for i, j in alignment.cigartuples:
           if i == 0:
             align_length = j
@@ -231,7 +231,8 @@ def main():
             align_identity = j
           
         
-        if align_length >= ALG_LEN_THRESH and align_identity >= ALG_ID_THRESH:         
+        if align_length >= ALG_LEN_THRESH and align_identity >= ALG_ID_THRESH \
+         and alignment.mapping_quality >= MAPQ_THRESH and alignment.mapping_quality != 255:         
           qi = rid_ri[ alignment.qname ]
           gi = int(bamfile_handle.getrname(alignment.rname).split("|")[1])        
           read_genomes.setdefault( qi, [] ).append( gdt.taxids.index(gdt.gi_taxid[gi]) )
