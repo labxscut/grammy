@@ -71,6 +71,8 @@ def main():
   abd_bsd = gemmath.bootstrap_standard_error( f, l, bts )
   est_avl = gemmath.weighted_average( a, l )
 
+	print abd_bsd
+	print a
   #output >> .gra
   #output >> .avl
   prj,suffix = os.path.splitext(mix_par)
