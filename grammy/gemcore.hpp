@@ -12,12 +12,13 @@
 #include <vector>
 #include <string>
 #include <limits>         // for numeric_limits<flt>::infinity()
-#include <tr1/unordered_map>
+//#include <tr1/unordered_map>
+#include <unordered_map>
 #include "mydebug.hpp"
 #include "mmio.h"
 
 using namespace std;
-//Forward Declaration for std::tr1::unordered_map, for compatibility with SWIG, see tTR in test
+//Forward Declaration for std::unordered_map, for compatibility with SWIG, see tTR in test
 //swig notes:
 //swig has problem wrapping nested typenames it doesn't recognoize, adhoc solved by obj.disown()
 //a forward declaration is needed for swig to know the type
@@ -30,7 +31,7 @@ namespace std{
 /* TYPES */
 //in most architectures, short=16bit, long=32bit, longlong=64bit, float=32bit, double=64bit
 //Backend Matrix Type is Preselected by tBE.h in testing suite
-//Best Performance Currently is std::tr1::unordered_map
+//Best Performance Currently is std::unordered_map
 //Real Backend Used sometimes is the inherited with interface: B.at(i).at(j) to read and B[i][j]= to assign
 //Customizd Numerical Types and Constants
 typedef unsigned long iint;		   // for sparse matrix indecies, up to 2^32 = 4294967296L, or namely index int
@@ -47,22 +48,22 @@ extern const flt dft_rt_lflt;                                // to use with P co
 typedef vector<flt> VF;
 typedef vector<VF> MF;
 typedef vector<iint> VII;
-//Extended tr1::unordered_map template
+//Extended unordered_map template
 //TODO sep tcdc and tcdf: template <typename K, typename V, V& > class tr1_unordered_map, see tHC.C; 
 template <typename K, typename V, V const& dft_rt_value> 
-class tr1_unordered_map : public tr1::unordered_map<K, V> {
+class tr1_unordered_map : public unordered_map<K, V> {
 public:
   //const static V dft_rt_v = dft_rt_v;  //more abstraction of a sparse matrix behavior to be summarized
   //static const V& dft_rt_v() { return dft_rt_value; };
   //V dft_rt_v; 
   V const& at( K k ) const {
-    if ( tr1::unordered_map<K,V>::find(k) != tr1::unordered_map<K,V>::end() )
-      return tr1::unordered_map<K,V>::find(k)->second;
+    if ( unordered_map<K,V>::find(k) != unordered_map<K,V>::end() )
+      return unordered_map<K,V>::find(k)->second;
     else
       return dft_rt_value;
   };
-  //tr1_unordered_map(): tr1::unordered_map<K, V>(){ cout<<"tr1_unordered_map init"<<endl; };
-}; //Extends tr1::unordered_map to fullfil interface needs
+  //tr1_unordered_map(): unordered_map<K, V>(){ cout<<"tr1_unordered_map init"<<endl; };
+}; //Extends unordered_map to fullfil interface needs
 typedef tr1_unordered_map<iint, flt, dft_rt_lflt> TR1_UM_L;
 extern const TR1_UM_L dft_rt_TR1_UM_L;
 typedef tr1_unordered_map<iint, TR1_UM_L, dft_rt_TR1_UM_L> TR1_UUM_L; //candidate
