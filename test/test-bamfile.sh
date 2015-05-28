@@ -10,7 +10,7 @@ then
 	tar -zxvf grefs.tgz
 fi
 
-echo "###the script is an test example of grammy with step to step explanation###"
+echo "###the script is an test example of grammy for bam files with step to step explanation###"
 echo "###put grefs under this test directory###"
 
 echo "###[first] generate the genome data needed by grammy"
@@ -32,28 +32,31 @@ echo "#now we have two additional files"
 echo "#c0_L100_N1000_S1.rdt is the read data file need by grammy"
 echo "#c0_L100_N1000_S1.fasta.gz is the zipped reads fasta file"
 
-echo "###[third] we prepare the probablity matrix file will be used by grammy"
-echo "#c0_L100_N1000_S1.tblat.1 and c0_L100_N1000_S1.tblat.2 are two mapping result files"
-echo "grammy_pre c0_L100_N1000_S1 test"
+echo "###[third] we prepare the probablity matrix file will be used by grammy according to bam files"
+echo "#c0_L100_N1000_S1.bam.1 and c0_L100_N1000_S1.bam.2 are two mapping result files"
+echo "#attention: these bam files need to be sorted and indexed, which means there should be c0_L100_N1000_S1.bam.1.bai and c0_L100_N1000_S1.bam.2.bai under the same directory"
+echo "grammy_pre c0_L100_N1000_S1 test -m bam -p c0_L100_N1000_S1.bam"
 
-grammy_pre c0_L100_N1000_S1 test
+grammy_pre c0_L100_N1000_S1 test -m bam -p c0_L100_N1000_S1.bam
 
-echo "#now we parsed the two result files and get the c0_L100_N1000_S1.mtx file need by grammy"
+echo "#now we parsed the two result files and get the c0_L100_N1000_S1.bam.mtx file need by grammy"
 
 echo "###[fourth] we carry out the EM esimation"
-echo "grammy_em c0_L100_N1000_S1.mtx"
+echo "grammy_em c0_L100_N1000_S1.bam.mtx"
 
-grammy_em c0_L100_N1000_S1.mtx
+grammy_em c0_L100_N1000_S1.bam.mtx
 
+echo "#use '-b 0 -i M -c L -t 0.01' to greatly reduce computation time by sacrificing a little accuracy" 
+echo "#use '-b 0 -i M -c U -t 0.01' would be slower"
 echo "#we have three new files"
-echo "#c0_L100_N1000_S1.est, where the estimation is, not normalized"
-echo "#c0_L100_N1000_S1.btp, where the extra bootstrap estimations are"
-echo "#c0_L100_N1000_S1.lld, final log likelihood"
+echo "#c0_L100_N1000_S1.bam.est, where the estimation is, not normalized"
+echo "#c0_L100_N1000_S1.bam.btp, where the extra bootstrap estimations are"
+echo "#c0_L100_N1000_S1.bam.lld, final log likelihood"
 
 echo "###[fifth] we normalize the result and get the genome length and relative abundance estimates"
-echo "grammy_post c0_L100_N1000_S1.est test c0_L100_N1000_S1.btp"
+echo "grammy_post c0_L100_N1000_S1.bam.est test c0_L100_N1000_S1.bam.btp"
 
-grammy_post c0_L100_N1000_S1.est test c0_L100_N1000_S1.btp
+grammy_post c0_L100_N1000_S1.bam.est test c0_L100_N1000_S1.bam.btp
 
-echo "#c0_L100_N1000_S1.avl, average genome length estimates"
-echo "#c0_L100_N1000_S1.gra, genome relative abundance, first line is taxon id, second line is relative abundance, last line is error bound"
+echo "#c0_L100_N1000_S1.bam.avl, average genome length estimates"
+echo "#c0_L100_N1000_S1.bam.gra, genome relative abundance, first line is taxon id, second line is relative abundance, last line is error bound"

@@ -22,6 +22,7 @@ include scripts/grammy-post.py
 include scripts/grammy-pre.py
 include scripts/grammy-rdt.py
 include test/test.sh
+include test/test-bamfile.sh
 include test/test.fna.1
 include test/test.fna.2
 include test/test.gdt
@@ -30,6 +31,10 @@ include test/c0_L100_N1000_S1.fasta.gz
 include test/c0_L100_N1000_S1.fas
 include test/c0_L100_N1000_S1.tblat.1
 include test/c0_L100_N1000_S1.tblat.2
+include test/c0_L100_N1000_S1.bam.1
+include test/c0_L100_N1000_S1.bam.1.bai
+include test/c0_L100_N1000_S1.bam.2
+include test/c0_L100_N1000_S1.bam.2.bai
 include test/c0_L100_N1000_S1.rdt
 include test/c0_L100_N1000_S1.avl
 include test/c0_L100_N1000_S1.btp
