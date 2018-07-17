@@ -44,7 +44,7 @@ doclines=__doc__.splitlines()
 
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 
-os.environ['CC'] = 'g++'  #temporary measure to trick distutils use g++, need update to distutils2
+os.environ['CC'] = 'g++ -std=c++11'  #temporary measure to trick distutils use g++, need update to distutils2
 
 class my_build(build.build):
 # different order: build_ext *before* build_py, so that 
