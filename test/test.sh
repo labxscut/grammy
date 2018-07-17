@@ -2,13 +2,13 @@
 
 ###the script is an test example of grammy with step to step explanation, they are also echoed###
 echo "###get the sample genome references file"""
-if [ ! -d grefs ]
+if [ ! -e grefs.tgz ]
 then
 	echo "wget http://meta.usc.edu/softs/grammy/grefs.tgz"
 	wget "http://meta.usc.edu/softs/grammy/grefs.tgz" -O grefs.tgz
-	echo "tar -zxvf grefs.tgz"
-	tar -zxvf grefs.tgz
 fi
+echo "tar -zxvf grefs.tgz"
+tar -zxvf grefs.tgz
 
 echo "###the script is an test example of grammy with step to step explanation###"
 echo "###put grefs under this test directory###"
