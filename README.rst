@@ -1,9 +1,9 @@
-.. |Logo| image:: https://bitbucket.org/charade/grammy/raw/master/doc/images/logo.png
+.. |Logo| image:: https://bitbucket.org/charade/grammy/raw/master/doc/images/grammy_logo.png
    :alt: logo.png
    :height: 25px
    :width: 25px
 
-.. |Model| image:: https://bitbucket.org/charade/grammy/raw/master/doc/images/model.png
+.. |Model| image:: https://bitbucket.org/charade/grammy/raw/master/doc/images/grammy_model.png
    :alt: model.png
    :height: 200px
    :width: 200px
