@@ -8,12 +8,8 @@
    :height: 200px
    :width: 200px
 
-GRAMMy: Genome Relative Abundance using Mixture Models
-========================================================
-
-a Tool for Shotgun Metagenomics Analysis
-
-|Logo|
+|Logo| GRAMMy: Genome Relative Abundance using Mixture Models - a Tool for Shotgun Metagenomics Analysis
+=========================================================================================================
 
 QUICK LINKS
 -----------
