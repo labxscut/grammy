@@ -127,5 +127,5 @@ Questions and comments shall be addressed to fsun@usc.edu and l.c.xia@stanford.e
 CITATIONS
 --------------------------------------------------------
 
-1. Accurate Genome Relative Abundance Estimation Based on Shotgun Metagenomic Reads. LC Xia, JA Cram, T Chen, JA Fuhrman, F Sun. PloS ONE 6 (12), e27992 (https://doi.org/10.1371/journal.pone.0027992) - for grammy software
-2. Integrated Metagenomic Data Analysis Demonstrates That A Loss Of Diversity In Oral Microbiota Is Associated With Periodontitis. D Ai, R Huang, J Wen, C Li, J Zhu, LC Xia# (https://doi.org/10.1186/s12864-016-3254-5) - for docker pipeline
+1. Accurate Genome Relative Abundance Estimation Based on Shotgun Metagenomic Reads. LC Xia, JA Cram, T Chen, JA Fuhrman, F Sun. PloS ONE 2011 6 (12), e27992 (https://doi.org/10.1371/journal.pone.0027992) - for grammy software
+2. Integrated Metagenomic Data Analysis Demonstrates That A Loss Of Diversity In Oral Microbiota Is Associated With Periodontitis. D Ai, R Huang, J Wen, C Li, J Zhu, LC Xia#. BMC Genomics 2017 18(S1), 1041 (https://doi.org/10.1186/s12864-016-3254-5) - for docker pipeline
