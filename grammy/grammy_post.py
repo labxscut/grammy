@@ -71,15 +71,15 @@ def main():
   abd_bsd = gemmath.bootstrap_standard_error( f, l, bts )
   est_avl = gemmath.weighted_average( a, l )
 
-	print abd_bsd
-	print a
+  #print abd_bsd
+  #print a
   #output >> .gra
   #output >> .avl
   prj,suffix = os.path.splitext(mix_par)
   if(np.isnan(abd_bsd)):
     abd_bsd = [0] * len(a)
-  print abd_bsd
-  print a
+  #print abd_bsd
+  #print a
   gra_file = open( ".".join([prj,"gra"]), 'w' )
   print >>gra_file, '\n'.join( [ '\t'.join( [ str(v) for v in gdt.taxids ] ), '\t'.join( [ "%.4g" % v for v in a ] ), '\t'.join( [ "%.4g" % v for v in abd_bsd ] ) ] )  
   avl_file = open( ".".join([prj,"avl"]), 'w' )
