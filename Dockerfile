@@ -47,14 +47,14 @@
 ##### Above Replaced By from charade/xlibbox:basic
 
 FROM charade/xlibbox:basic
-RUN apt-get update
+RUN apt-get update -y
 
 ### avoid RPC error with https ###
 RUN git config --global http.sslVerify false
 RUN git config --global http.postBuffer 1048576000
 
-### install elsa ###
-RUN cd $HOME/setup && git clone --verbose https://charade@bitbucket.org/charade/grammy.git
+### install grammy (require git-lfs) ###
+RUN cd $HOME/setup && git lfs clone --verbose https://bitbucket.org/charade/grammy.git
 RUN cd $HOME/setup/grammy && python setup.py install --force
 
 ### run test scripts ###
