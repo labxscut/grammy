@@ -76,7 +76,7 @@ def main():
   #output >> .gra
   #output >> .avl
   prj,suffix = os.path.splitext(mix_par)
-  if(np.isnan(abd_bsd)):
+  if(np.isnan(abd_bsd).any()):
     abd_bsd = [0] * len(a)
   #print abd_bsd
   #print a
