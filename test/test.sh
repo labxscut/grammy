@@ -36,7 +36,7 @@ echo "###[third] we prepare the probablity matrix file will be used by grammy"
 echo "#c0_L100_N1000_S1.tblat.1 and c0_L100_N1000_S1.tblat.2 are two mapping result files"
 echo "grammy_pre c0_L100_N1000_S1 test"
 
-grammy_pre c0_L100_N1000_S1 test
+grammy_pre c0_L100_N1000_S1 test #legacy support for blast
 
 echo "#now we parsed the two result files and get the c0_L100_N1000_S1.mtx file need by grammy"
 

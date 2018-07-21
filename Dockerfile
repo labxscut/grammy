@@ -59,4 +59,4 @@ RUN cd $HOME/setup/grammy && python setup.py install --force
 
 ### run test scripts ###
 RUN cd $HOME/setup/grammy/test && ./test.sh
-RUN cd $HOME/setup/grammy/test && ./test-bamfile.sh
+#RUN cd $HOME/setup/grammy/test && ./test-bamfile.sh #this requires a good amount of space, use with caution
