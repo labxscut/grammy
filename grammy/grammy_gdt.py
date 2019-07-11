@@ -47,13 +47,16 @@ def main():
 
   parser = argparse.ArgumentParser(description="grammy-gdt Commandline Tool")
   parser.add_argument("o_prefix", metavar= "o_prefix", help="output prefix, o_prefix.gdt will be the output filename")
-  parser.add_argument("taxids", metavar= "taxids", help="taxids to include, taxids: t1,t2,...,tm  each tid t? is a INTEGER and must be found in grefs/gid_tid.dmp")
+  parser.add_argument("taxids_file", metavar= "taxids_file", help="a file of taxids to include, taxids: t1,t2,...,tm  each tid t? is a INTEGER and must be found in grefs/gid_tid.dmp")
   parser.add_argument("-d","--dmp", dest="dmp", help="gid to tid dump file, default=grefs/gid_tid.dmp", default="grefs/gid_tid.dmp")
   parser.add_argument("-r","--ref", dest="ref", help="reference genome dir, default=grefs", default="grefs")
   parser.add_argument("-p","--per", dest="per", type=int, help="number of genomes per file, default=20", default=20)
   arg_namespace = parser.parse_args()
-
-  taxids = [int(v) for v in vars(arg_namespace)['taxids'].split(',')]
+  
+ 
+  fa = open(arg_namespace.taxids_file,'r')
+  taxids_str = fa.read()
+  taxids = [int(v) for v in taxids_str.split(',')]
   o_prefix = vars(arg_namespace)['o_prefix']
   dmp = vars(arg_namespace)['dmp']
   ref = vars(arg_namespace)['ref']

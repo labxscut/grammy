@@ -224,16 +224,25 @@ def main():
       for alignment in bamfile_handle.fetch():
         align_length = 0
         align_identity = alignment.query_length
+        if alignment.cigartuples == None:
+          continue
         for i, j in alignment.cigartuples:
           if i == 0:
             align_length = j
           elif i == 7:
             align_identity = j
-          
         
         if align_length >= ALG_LEN_THRESH and align_identity >= ALG_ID_THRESH \
-         and alignment.mapping_quality >= MAPQ_THRESH and alignment.mapping_quality != 255:         
-          qi = rid_ri[ alignment.qname ]
+         and alignment.mapping_quality >= MAPQ_THRESH: #and alignment.mapping_quality != 255:         
+          if alignment.is_paired:
+            assert alignment.is_read1 != alignment.is_read2
+            if alignment.is_read1:
+              qname_suffix = "/1"
+            if alignment.is_read2:
+              qname_suffix = "/2"
+            qi = rid_ri[ alignment.qname + qname_suffix ]
+          else:
+            qi = rid_ri[ alignment.qname ]
           gi = int(bamfile_handle.getrname(alignment.rname).split("|")[1])        
           read_genomes.setdefault( qi, [] ).append( gdt.taxids.index(gdt.gi_taxid[gi]) )
         
