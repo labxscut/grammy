@@ -59,31 +59,44 @@ def main():
   mix_par = vars(arg_namespace)['mix_par']
   gen_dat = vars(arg_namespace)['gen_dat']
   btp = vars(arg_namespace)['btp']
+    
+  if os.stat(btp).st_size != 1:
+    print "btp is not empty"
+    gdt = gemaux.Genome_Data()
+    gdt.read( gen_dat )
+    f = np.loadtxt( mix_par )
+    bts = np.loadtxt( btp )
 
-  gdt = gemaux.Genome_Data()
-  gdt.read( gen_dat )
-  f = np.loadtxt( mix_par )
-  bts = np.loadtxt( btp )
-  l = np.array( [ gdt.taxid_length[tid] for tid in gdt.taxids ], dtype='float' )
-  #print l, f
-  assert len(l) == len(f) - 1
-  a = gemmath.inverse_proportion_normalize( f, l ) 
-  abd_bsd = gemmath.bootstrap_standard_error( f, l, bts )
-  est_avl = gemmath.weighted_average( a, l )
+    l = np.array( [ gdt.taxid_length[tid] for tid in gdt.taxids ], dtype='float' )
+    #print l, f
+    assert len(l) == len(f) - 1
+    a = gemmath.inverse_proportion_normalize( f, l ) 
+    abd_bsd = gemmath.bootstrap_standard_error( f, l, bts )
+    est_avl = gemmath.weighted_average( a, l )
 
-  #print abd_bsd
-  #print a
-  #output >> .gra
-  #output >> .avl
-  prj,suffix = os.path.splitext(mix_par)
-  if(np.isnan(abd_bsd).any()):
-    abd_bsd = [0] * len(a)
-  #print abd_bsd
-  #print a
-  gra_file = open( ".".join([prj,"gra"]), 'w' )
-  print >>gra_file, '\n'.join( [ '\t'.join( [ str(v) for v in gdt.taxids ] ), '\t'.join( [ "%.4g" % v for v in a ] ), '\t'.join( [ "%.4g" % v for v in abd_bsd ] ) ] )  
-  avl_file = open( ".".join([prj,"avl"]), 'w' )
-  print >>avl_file, est_avl
+    #output >> .gra
+    #output >> .avl
+    prj,suffix = os.path.splitext(mix_par)
+    gra_file = open( ".".join([prj,"gra"]), 'w' )
+    print >>gra_file, '\n'.join( [ '\t'.join( [ str(v) for v in gdt.taxids ] ), '\t'.join( [ "%.4g" % v for v in a ] ), '\t'.join( [ "%.4g" % v for v in abd_bsd ] ) ] )
+    avl_file = open( ".".join([prj,"avl"]), 'w' )
+    print >>avl_file, est_avl
+  else:
+    print "btp is empty"
+    gdt = gemaux.Genome_Data()
+    gdt.read( gen_dat )
+    f = np.loadtxt( mix_par )
+  
+    l = np.array( [ gdt.taxid_length[tid] for tid in gdt.taxids ], dtype='float' )
+    assert len(l) == len(f) - 1
+    a = gemmath.inverse_proportion_normalize( f, l )
+    est_avl = gemmath.weighted_average( a, l )
+           
+    prj,suffix = os.path.splitext(mix_par)
+    gra_file = open( ".".join([prj,"gra"]), 'w' )
+    print >>gra_file, '\n'.join( [ '\t'.join( [ str(v) for v in gdt.taxids ] ), '\t'.join( [ "%.4g" % v for v in a ] )])
+    avl_file = open( ".".join([prj,"avl"]), 'w' ) 
+    print >>avl_file, est_avl
 
 if __name__ == "__main__":
   #
