@@ -72,8 +72,7 @@ def main():
     help="second parameter for read assignment method, al,id,ev or bg",
     default="75,75,-5") 
   arg_namespace = parser.parse_args()
-
-  rdt_prefix = os.path.basename(vars(arg_namespace)['read_dat'])
+  rdt_prefix = os.path.basename(vars(arg_namespace)['read_dat']).rstrip(".")
   rdt = gemaux.Read_Data()
   rdt.read( rdt_prefix )
 

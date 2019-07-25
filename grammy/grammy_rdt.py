@@ -55,7 +55,7 @@ def parse_reads( o_prefix, src_dir, i_suffix, name_change, seq_tech ):
       #
       print >>sys.stderr, "processing", file
       reads_src = None
-      set_name = os.path.basename(file).rstrip(i_suffix)
+      set_name = os.path.basename(file).rstrip(i_suffix).rstrip(".")
       set_name = set_name in name_change and name_change[set_name] or set_name
       reads_src = os.path.join( src_dir, file )
       reads_tgt = os.path.join( o_prefix, '%s.fasta.gz' % set_name )
