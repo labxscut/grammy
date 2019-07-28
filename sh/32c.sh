@@ -1,7 +1,7 @@
 ###!/usr/bin/env bash
 echo "begining"
 date
-path=`pwd`
+path="/usr/test"
 
 fasta="88af4276-749a-4928-81e8-2361b2da1324_gdc_realn_rehead"
 data=${path}/QC/${fasta}

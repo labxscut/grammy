@@ -1,6 +1,6 @@
 #!/bin/bash
 ###filter unmappedone & unmappedtwo fastq
-main_directory=`pwd`
+main_directory="/usr/test"
 data_directory=${main_directory}/bam
 mkdir ${main_directory}/fastq
 result_directory=${main_directory}/fastq

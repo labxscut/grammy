@@ -1,6 +1,6 @@
 ###!/usr/bin/env bash
 ###################QC
-main_directory=`pwd`
+main_directory="/usr/test"
 
 mkdir ${main_directory}/QC
 qc=${main_directory}/QC
@@ -42,12 +42,12 @@ cat ${y}_2.fasta >> ${y}.fasta
 #seqkit sort -n ${y}.fasta > ${y}.sort.fasta
 
 cd ${main_directory}
-mkdir ${main_directory}/fa
+#mkdir ${main_directory}/fa
 
 cp ${qc}/${y}/${y}.fasta .
 
-cd ${main_directory}/fa
-cp ${qc}/${y}/${y}_1.fasta .
-cp ${qc}/${y}/${y}_2.fasta .
+#cd ${main_directory}/fa
+#cp ${qc}/${y}/${y}_1.fasta .
+#cp ${qc}/${y}/${y}_2.fasta .
 
 done
