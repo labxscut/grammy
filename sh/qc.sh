@@ -1,7 +1,7 @@
 ###!/usr/bin/env bash
 ###################QC
 main_directory="/usr/test"
-
+cd ${main_directory}
 mkdir ${main_directory}/QC
 qc=${main_directory}/QC
 result_directory=${main_directory}/fastq

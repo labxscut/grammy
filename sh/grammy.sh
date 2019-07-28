@@ -2,10 +2,15 @@
 echo "begining"
 date
 path="/usr/test"
+cd ${path}
 
-fasta="88af4276-749a-4928-81e8-2361b2da1324_gdc_realn_rehead"
-data=${path}/QC/${fasta}
 time grammy_rdt ${path} ${path} -s fasta 
+for x in `cat ${path}/dataname.txt`
+do 
+
+fasta=${x}
+data=${path}/QC/${fasta}
+
 #time bwa mem -p -a -S -t 6 reference.fna.1 ${fasta}.fasta > ${fasta}.sam
 
 time bwa mem -a -S -t 6 reference.fna.1 ${data}/${fasta}_1.fasta ${data}/${fasta}_2.fasta > ${fasta}.sam
@@ -27,6 +32,7 @@ time grammy_post ${fasta}.bam.est reference ${fasta}.bam.btp
 echo "finished"
 date
 
+done
 #path=`pwd`
 #fasta="7dadfb04-1d05-43fe-80b9-f767e22d02f5_crc"
 #/usr/bin/time -v -o ${y}.log GRAMMy ${path} ${y}

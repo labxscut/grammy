@@ -1,6 +1,7 @@
 #!/bin/bash
 ###filter unmappedone & unmappedtwo fastq
 main_directory="/usr/test"
+cd ${main_directory}
 data_directory=${main_directory}/bam
 mkdir ${main_directory}/fastq
 result_directory=${main_directory}/fastq
