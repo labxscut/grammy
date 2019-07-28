@@ -8,7 +8,7 @@ time grammy_rdt ${path} ${path} -s fasta
 for x in `cat ${path}/dataname.txt`
 do 
 
-fasta=${x}
+fasta=${x%.bam}
 data=${path}/QC/${fasta}
 
 #time bwa mem -p -a -S -t 6 reference.fna.1 ${fasta}.fasta > ${fasta}.sam
