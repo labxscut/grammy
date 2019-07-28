@@ -42,11 +42,11 @@ cat ${y}_2.fasta >> ${y}.fasta
 #seqkit sort -n ${y}.fasta > ${y}.sort.fasta
 
 cd ${main_directory}
-mkdir ${main_directory}/fasta
+mkdir ${main_directory}/fa
 
 cp ${qc}/${y}/${y}.fasta .
 
-cd ${main_directory}/fasta
+cd ${main_directory}/fa
 cp ${qc}/${y}/${y}_1.fasta .
 cp ${qc}/${y}/${y}_2.fasta .
 
