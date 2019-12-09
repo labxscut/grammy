@@ -60,7 +60,7 @@ def main():
   gen_dat = vars(arg_namespace)['gen_dat']
   btp = vars(arg_namespace)['btp']
     
-  if os.stat(btp).st_size != 1:
+  if os.stat(btp).st_size != 0:
     print "btp is not empty"
     gdt = gemaux.Genome_Data()
     gdt.read( gen_dat )
