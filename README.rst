@@ -1,9 +1,9 @@
-.. |Logo| image:: https://bitbucket.org/charade/grammy/raw/master/doc/images/grammy_logo.png
+.. |Logo| image:: doc/images/grammy_logo.png
    :alt: logo.png
    :height: 25px
    :width: 25px
 
-.. |Model| image:: https://bitbucket.org/charade/grammy/raw/master/doc/images/grammy_model.png
+.. |Model| image:: doc/images/grammy_model.png
    :alt: model.png
    :height: 200px
    :width: 200px
@@ -14,9 +14,9 @@
 QUICK LINKS
 -----------
 
-`Manuals <https://bitbucket.org/charade/grammy/wiki/Manual>`__
+`Manuals <docs/Manual.rst>`__
 
-`FAQ <https://bitbucket.org/charade/grammy/wiki/FAQ>`__
+`FAQ <docs/FAQ.rst>`__
 
 INTRODUCTION
 --------------------------------------------------------
@@ -55,9 +55,9 @@ Docker (Platform Independent - Preferred)
 
 A Dockerfile is provided to build elsa enabled docker image from a standard Ubuntu docker image.
   To build a docker image using 'docker build $GRAMMYPKG', where $GRAMMYPKG is the unzipped path of elsa.
-  Or download the Dockerfile directly at:
+  Or use the Dockerfile shipped in the repository root:
 
-    https://bitbucket.org/charade/grammy/raw/master/Dockerfile
+    `Dockerfile <Dockerfile>`__
 
   Name the built container as your:container; Then mount current data directory to /var/data accessible by docker:
 
@@ -86,10 +86,10 @@ Install
 
 3. Development
 
-    GRAMMy is open source and the version controled repository is @:
-    	https://bitbucket.org/charade/grammy.
-    Use mercurial tools (http://mercurial.selenic.com) to download a local copy:
-        $hg clone ssh://hg@bitbucket.org/charade/grammy grammy-tip
+    GRAMMy is open source and the version controlled repository is @:
+    	https://github.com/labxscut/grammy.
+    Use git (https://git-scm.com) to download a local copy:
+        $git clone https://github.com/labxscut/grammy.git grammy-tip
 
     Follow standard python module setup to install:
         $cd grammy-tip
@@ -117,7 +117,7 @@ Usage
 WIKI
 --------------------------------------------------------
 
-GRAMMy's https://bitbucket.org/charade/grammy/wiki/ page is an growing resource for manuals, FAQs and other information. This is a MUST read place before you actually using the GRAMMy tool. These documentations are also openly editable. You are more than welcome to contribute to this ongoing documentation.
+GRAMMy's manuals, FAQs and other documentation are maintained in the ``docs/`` folder of this repository (see `docs/Manual.rst <docs/Manual.rst>`__ and `docs/FAQ.rst <docs/FAQ.rst>`__). This is a MUST read before you actually use the GRAMMy tool. Contributions to this documentation are welcome.
 
 CONTACTS
 --------------------------------------------------------
